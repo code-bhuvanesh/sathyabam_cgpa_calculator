@@ -37,28 +37,29 @@ class _ChooseBranchState extends State<ChooseBranch> {
   Widget build(BuildContext context) {
     double totalHeight = MediaQuery.of(context).size.height;
     return Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            "Select your Branch",
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 28, color: Colors.black),
-          ),
-          iconTheme: const IconThemeData(color: Colors.black),
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          centerTitle: true,
+      appBar: AppBar(
+        title: const Text(
+          "Select your Branch",
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 28, color: Colors.black),
         ),
-        body: (data.isEmpty)
-            ? const Center(
-                child: CircularProgressIndicator(),
-              )
-            : CommonListWidget(
-                whatToSelect: "branch",
-                nextPage: ChooseCourse.routeName,
-                allItems: branches,
-                totalHeight: totalHeight,
-                data: data,
-                argumentsGenerator: (index) => [index, data[index]],
-              ));
+        iconTheme: const IconThemeData(color: Colors.black),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        centerTitle: true,
+      ),
+      body: (data.isEmpty)
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : CommonListWidget(
+              whatToSelect: "branch",
+              nextPage: ChooseCourse.routeName,
+              allItems: branches,
+              totalHeight: totalHeight,
+              data: data,
+              argumentsGenerator: (index) => [index, data[index]],
+            ),
+    );
   }
 }

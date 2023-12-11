@@ -1,18 +1,26 @@
+import 'dart:convert';
+
+import 'package:cgpa_calculator/constants.dart';
 import 'package:cgpa_calculator/models/course.dart';
 import 'package:cgpa_calculator/models/current_sem_cgpa.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 import '../models/subject.dart';
+import '../utilites/secure_storage.dart';
 import '../widget/subject_wiget.dart';
 import 'show_cgpa_page.dart';
 
 class CalculateGpaPage extends StatefulWidget {
-  const CalculateGpaPage({super.key, required this.data});
+  CalculateGpaPage({
+    super.key,
+    required Map<String, dynamic> data,
+  }) : _data = data;
 
   static const String routeName = "/CalculateGpaPage";
 
-  final Map<String, dynamic> data;
+  final Map<String, dynamic> _data;
 
   @override
   State<CalculateGpaPage> createState() => _CalculateGpaPageState();
@@ -31,6 +39,16 @@ class _CalculateGpaPageState extends State<CalculateGpaPage> {
   List<Subject> semSubjects = [];
   Map<String, Map<String, TextEditingController>> subjectsTEC = {};
 
+  //user details
+  SecureStorage secureStorage = SecureStorage();
+
+  @override
+  void initState() {
+    loadSubs();
+    // getUserData();
+    super.initState();
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -41,10 +59,63 @@ class _CalculateGpaPageState extends State<CalculateGpaPage> {
     }
   }
 
-  @override
-  void initState() {
-    loadSubs();
-    super.initState();
+  void getUserData() async {
+    var authToken = await secureStorage.readSecureData(authTokenKey);
+    var regno = await secureStorage.readSecureData(regnoKey);
+    var startYear =
+        int.parse(await secureStorage.readSecureData(startYearKey) as String);
+    var endYear =
+        int.parse(await secureStorage.readSecureData(endYearKey) as String);
+
+    // print(
+    //     "${startYear + (sem ~/ 2).ceil() - 1}-${startYear + (sem ~/ 2).ceil()}");
+
+    var url =
+        "https://erp.sathyabama.ac.in/erp/api/v1.0/ResultMark/studentResult";
+    var client = http.Client();
+    var headers = {
+      "Authorization": "Bearer $authToken",
+    };
+
+    var body = {
+      "RegisterNumber": "41110198",
+      "AcademicMonthId": "${selectedSem % 2 == 0 ? 1 : 2}",
+      "AcademicYear":
+          "${startYear + (selectedSem / 2).ceil() - 1}-${startYear + (selectedSem / 2).ceil()}",
+      "Semester": "$selectedSem"
+    };
+    print("body:  $body");
+    var response =
+        await client.post(Uri.parse(url), headers: headers, body: body);
+    var data = jsonDecode(response.body)["responseData"]["SemResult"];
+    // print(data);
+    for (var i in data) {
+      print("subject code : ${i["SubjectCode"]}");
+      print("Subject Name : ${i["SubjectName"]}");
+      if (subjectsTEC[currSem]!.containsKey(i["SubjectCode"])) {
+        subjectsTEC[currSem]![i["SubjectCode"]]!.text =
+            i["TotalMark"].toString();
+        print("subject code : ${i["SubjectCode"]}");
+        print("Subject Name : ${i["SubjectName"]}");
+        print("mark: ${i["TotalMark"]}");
+      }
+    }
+    // print();
+  }
+
+  void loadSubs() async {
+    setState(() {
+      currentCourse = Course.fromJson("course name", widget._data);
+
+      if (!subjectsTEC.containsKey(currSem)) {
+        subjectsTEC.addAll({currSem: {}});
+      }
+      for (var i = 1; i <= currentCourse.getToatalSem(); i++) {
+        allSemGpa.addAll({"sem $i": -1.0});
+      }
+      semSubjects = currentCourse.getBySem(selectedSem);
+    });
+    createDropdownItems();
   }
 
   void checkToCalculate() {
@@ -93,7 +164,8 @@ class _CalculateGpaPageState extends State<CalculateGpaPage> {
       context: context,
       builder: ((context) => CupertinoAlertDialog(
             title: const Text(
-                "mark should be less than total marks of the subject"),
+              "mark should be less than total marks of the subject",
+            ),
             actions: [
               CupertinoDialogAction(
                 child: const Text("OK"),
@@ -179,23 +251,10 @@ class _CalculateGpaPageState extends State<CalculateGpaPage> {
     return notEmpty;
   }
 
-  void loadSubs() async {
-    setState(() {
-      currentCourse = Course.fromJson("course name", widget.data);
-
-      if (!subjectsTEC.containsKey(currSem)) {
-        subjectsTEC.addAll({currSem: {}});
-      }
-      for (var i = 1; i <= currentCourse.getToatalSem(); i++) {
-        allSemGpa.addAll({"sem $i": -1.0});
-      }
-      semSubjects = currentCourse.getBySem(selectedSem);
-    });
-    createDropdownItems();
-  }
-
   @override
   Widget build(BuildContext context) {
+    getUserData();
+
     if (!subjectsTEC.containsKey(currSem)) {
       subjectsTEC.addAll({currSem: {}});
     }

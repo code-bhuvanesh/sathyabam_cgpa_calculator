@@ -2,6 +2,7 @@ import 'package:cgpa_calculator/animations/page_transition_animation.dart';
 import 'package:cgpa_calculator/pages/Choose_branch_page.dart';
 import 'package:cgpa_calculator/pages/calculate_cgpa_page.dart';
 import 'package:cgpa_calculator/pages/choose_course_page.dart';
+import 'package:cgpa_calculator/pages/login_page.dart';
 import 'package:cgpa_calculator/pages/show_cgpa_page.dart';
 import 'package:cgpa_calculator/pages/splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -16,13 +17,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'CGPA CALCULATOR',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      title: 'cgpa calculator',
+      theme: ThemeData(primarySwatch: Colors.blue, useMaterial3: true),
       initialRoute: SplashScreen.routeName,
+      debugShowCheckedModeBanner: false,
       onGenerateRoute: (RouteSettings settings) {
         switch (settings.name) {
+          case LoginPage.routeName:
+            return PageTransionAnim(builder: (context) => const LoginPage());
           case ChooseBranch.routeName:
             return PageTransionAnim(
               builder: (context) => const ChooseBranch(),

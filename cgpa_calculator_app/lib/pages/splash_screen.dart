@@ -1,6 +1,5 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:cgpa_calculator/pages/Choose_branch_page.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:cgpa_calculator/pages/login_page.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatelessWidget {
@@ -21,7 +20,7 @@ class SplashScreen extends StatelessWidget {
               child: Column(
             children: [
               DefaultTextStyle(
-                style: TextStyle(
+                style: const TextStyle(
                     fontSize: 36,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
@@ -35,7 +34,7 @@ class SplashScreen extends StatelessWidget {
                   ],
                   totalRepeatCount: 1,
                   onFinished: () => Navigator.of(context)
-                      .popAndPushNamed(ChooseBranch.routeName),
+                      .popAndPushNamed(LoginPage.routeName),
                   // textAlign: TextAlign.center,
                 ),
               ),
