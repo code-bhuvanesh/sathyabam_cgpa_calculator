@@ -9,7 +9,7 @@ class SecureStorage {
     try {
       map = await _storage.readAll(
         // iOptions: _getIOSOptions(),
-        aOptions: _getAndroidOptions(),
+        // aOptions: _getAndroidOptions(),
       );
     } catch (e) {
       print(e);
@@ -21,7 +21,7 @@ class SecureStorage {
     try {
       await _storage.deleteAll(
         // iOptions: _getIOSOptions(),
-        aOptions: _getAndroidOptions(),
+        // aOptions: _getAndroidOptions(),
       );
       // _readAll();
     } catch (e) {
@@ -53,7 +53,7 @@ class SecureStorage {
         key: key,
         value: value,
         // iOptions: _getIOSOptions(),
-        aOptions: _getAndroidOptions(),
+        // aOptions: _getAndroidOptions(),
       );
     } catch (e) {
       print(e);

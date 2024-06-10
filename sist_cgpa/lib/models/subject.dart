@@ -31,11 +31,12 @@ class Subject {
   // final int subTutorialHours;
   // final int subPrcaticalHours;
 
-  factory Subject.fromJson(String subCode, Map<String, dynamic> json) {
+  factory Subject.fromJson(Map<String, dynamic> json) {
+    print(json);
     return Subject(
       id: json["id"],
       semester: json["semester"],
-      subCode: subCode.trim(),
+      subCode: json["subcode"].trim(),
       subName: removeMultipleSpace(json["coursetitle"]),
       subType: json["coursetype"],
       credit: json["credit"],

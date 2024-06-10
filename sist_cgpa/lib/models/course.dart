@@ -4,25 +4,13 @@ class Course {
   Course({
     required this.courseName,
     required this.subjects,
+    required this.maxsem,
   }) {
     removeNonCreditSubject();
   }
   final String courseName;
   final List<Subject> subjects;
-
-  factory Course.fromJson(String courseName, Map<String, dynamic> json) {
-    return Course(
-      courseName: courseName,
-      subjects: json.entries
-          .map(
-            (e) => Subject.fromJson(
-              e.key,
-              e.value,
-            ),
-          )
-          .toList(),
-    );
-  }
+  final int maxsem;
 
   List<Subject> getBySem(int sem) {
     return subjects.where((subject) => subject.semester == sem).toList();

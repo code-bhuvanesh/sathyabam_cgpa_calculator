@@ -1,6 +1,9 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:sist_cgpa/utilites/sqlite_db.dart';
 
 import '/animations/page_transition_animation.dart';
+import 'features/calculate_cgpa/bloc/calculate_cgpa_bloc.dart';
 import 'features/choose_branch/Choose_branch_page.dart';
 import 'features/calculate_cgpa/calculate_cgpa_page.dart';
 import 'features/choose_course/choose_course_page.dart';
@@ -10,10 +13,12 @@ import 'features/splash_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+
+  //initialize DB
+  SqliteDB().initializeDatabase();
   runApp(const MyApp());
-  
 }
 
 class MyApp extends StatelessWidget {
@@ -37,15 +42,17 @@ class MyApp extends StatelessWidget {
           case ChooseCourse.routeName:
             return PageTransionAnim(
               builder: (context) => ChooseCourse(
-                args: settings.arguments as List<dynamic>,
+                branch: settings.arguments as String,
               ),
             );
           case CalculateGpaPage.routeName:
             return PageTransionAnim(
-              builder: (context) => CalculateGpaPage(
-                data: settings.arguments as Map<String, dynamic>,
-              ),
-            );
+                builder: (context) => BlocProvider(
+                      create: (context) => CalculateCgpaBloc(),
+                      child: CalculateGpaPage(
+                        course: settings.arguments as String,
+                      ),
+                    ));
           case ShowCgpa.routeName:
             return PageTransionAnim(
               builder: (context) => ShowCgpa(

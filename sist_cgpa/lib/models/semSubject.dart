@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:sist_cgpa/models/subject.dart';
 
-class SemSubject{
+class SemSubject {
   final Subject sub;
-  final TextEditingController tex;
+  final TextEditingController texController = TextEditingController();
 
-  SemSubject({required this.sub, required this.tex});
+  SemSubject({
+    required this.sub,
+  });
 }

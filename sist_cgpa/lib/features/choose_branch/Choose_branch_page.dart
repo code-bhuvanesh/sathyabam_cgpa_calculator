@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import '../../utilites/sqlite_db.dart';
 import '../choose_course/choose_course_page.dart';
 import '/widget/common_list_widget.dart';
 import 'package:flutter/material.dart';
@@ -18,18 +19,18 @@ class _ChooseBranchState extends State<ChooseBranch> {
   List<String> branches = [];
   late Map<String, dynamic> data = {};
   List<String> filteredbranches = [];
-
+  late SqliteDB sqliteDB;
   @override
   void initState() {
-    readJson();
+    sqliteDB = SqliteDB();
+    loadBranches();
     super.initState();
   }
 
-  void readJson() async {
-    var response = await rootBundle.loadString("assets/course_credits.json");
+  void loadBranches() async {
+    var b = await sqliteDB.getBranchs();
     setState(() {
-      data = jsonDecode(response) as Map<String, dynamic>;
-      branches = data.keys.toList();
+      branches = b;
     });
   }
 
@@ -48,7 +49,7 @@ class _ChooseBranchState extends State<ChooseBranch> {
         elevation: 0,
         centerTitle: true,
       ),
-      body: (data.isEmpty)
+      body: (branches.isEmpty)
           ? const Center(
               child: CircularProgressIndicator(),
             )
@@ -57,8 +58,6 @@ class _ChooseBranchState extends State<ChooseBranch> {
               nextPage: ChooseCourse.routeName,
               allItems: branches,
               totalHeight: totalHeight,
-              data: data,
-              argumentsGenerator: (index) => [index, data[index]],
             ),
     );
   }

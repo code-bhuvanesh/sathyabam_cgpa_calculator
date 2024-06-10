@@ -7,16 +7,12 @@ class CommonListWidget extends StatefulWidget {
     required this.whatToSelect,
     required this.allItems,
     required this.totalHeight,
-    required this.data,
-    required this.argumentsGenerator,
   });
 
   final String nextPage;
   final String whatToSelect;
   final List<String> allItems;
   final double totalHeight;
-  final Map<String, dynamic> data;
-  final Function(String index) argumentsGenerator;
 
   @override
   State<CommonListWidget> createState() => _CommonListWidgetState();
@@ -24,7 +20,15 @@ class CommonListWidget extends StatefulWidget {
 
 class _CommonListWidgetState extends State<CommonListWidget> {
   TextEditingController searchedCourse = TextEditingController();
-  late List<String> filteredItems = widget.allItems;
+  late List<String> filteredItems;
+
+  @override
+  void initState() {
+    filteredItems = widget.allItems;
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -82,7 +86,7 @@ class _CommonListWidgetState extends State<CommonListWidget> {
               itemBuilder: (context, index) => GestureDetector(
                 onTap: () => Navigator.of(context).pushNamed(
                   widget.nextPage,
-                  arguments: widget.argumentsGenerator(filteredItems[index]),
+                  arguments: filteredItems[index],
                 ),
                 child: SizedBox(
                   width: double.infinity,

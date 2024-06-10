@@ -5,8 +5,11 @@ sealed class CalculateCgpaState {}
 
 final class CalculateCgpaInitial extends CalculateCgpaState {}
 
+class SubjectsLoaded extends CalculateCgpaState {
+  final Map<String, List<SemSubject>> semSubjects;
 
-class SubjectsLoaded extends CalculateCgpaState {}
+  SubjectsLoaded({required this.semSubjects});
+}
 
 class GpaResutl extends CalculateCgpaState {}
 
