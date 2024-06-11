@@ -1,5 +1,10 @@
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:sist_cgpa/features/add_subjects/add_subjects_page.dart';
+import 'package:sist_cgpa/features/add_subjects/bloc/add_page_bloc.dart';
+import 'package:sist_cgpa/features/login/bloc/login_bloc.dart';
+import 'package:sist_cgpa/features/settings/settings_page.dart';
 import 'package:sist_cgpa/utilites/sqlite_db.dart';
 
 import '/animations/page_transition_animation.dart';
@@ -18,6 +23,13 @@ void main() {
 
   //initialize DB
   SqliteDB().initializeDatabase();
+
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.dark, // Set your desired color here
+    ),
+  );
   runApp(const MyApp());
 }
 
@@ -27,14 +39,19 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'cgpa calculator',
+      title: 'sist cgpa',
       theme: ThemeData(primarySwatch: Colors.blue, useMaterial3: true),
       initialRoute: LoginPage.routeName,
       debugShowCheckedModeBanner: false,
       onGenerateRoute: (RouteSettings settings) {
         switch (settings.name) {
           case LoginPage.routeName:
-            return PageTransionAnim(builder: (context) => const LoginPage());
+            return PageTransionAnim(
+              builder: (context) => BlocProvider(
+                create: (context) => LoginBloc(),
+                child: const LoginPage(),
+              ),
+            );
           case ChooseBranch.routeName:
             return PageTransionAnim(
               builder: (context) => const ChooseBranch(),
@@ -45,23 +62,36 @@ class MyApp extends StatelessWidget {
                 branch: settings.arguments as String,
               ),
             );
+          case AddSubjectsPage.routeName:
+            return PageTransionAnim(
+              builder: (context) => BlocProvider(
+                create: (context) => AddSubjectBloc(),
+                child: const AddSubjectsPage(),
+              ),
+            );
           case CalculateGpaPage.routeName:
             return PageTransionAnim(
-                builder: (context) => BlocProvider(
-                      create: (context) => CalculateCgpaBloc(),
-                      child: CalculateGpaPage(
-                        course: settings.arguments as String,
-                      ),
-                    ));
+              builder: (context) => BlocProvider(
+                create: (context) => CalculateCgpaBloc(),
+                child: const CalculateGpaPage(),
+              ),
+            );
           case ShowCgpa.routeName:
             return PageTransionAnim(
               builder: (context) => ShowCgpa(
-                args: settings.arguments as List<dynamic>,
+                cgpa: settings.arguments as double,
               ),
+            );
+          case SetttingsPage.routeName:
+            return PageTransionAnim(
+              builder: (context) => const SetttingsPage(),
             );
           default:
             return PageTransionAnim(
-              builder: (context) => const LoginPage(),
+              builder: (context) => BlocProvider(
+                create: (context) => LoginBloc(),
+                child: const LoginPage(),
+              ),
             );
         }
       },

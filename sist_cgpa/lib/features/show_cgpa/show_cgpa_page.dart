@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 
 class ShowCgpa extends StatelessWidget {
   static const String routeName = "/showCgpa";
-  const ShowCgpa({super.key, required this.args});
-  final List<dynamic> args;
+  const ShowCgpa({super.key, required this.cgpa});
+  final double cgpa;
 
   @override
   Widget build(BuildContext context) {
-    String cgpa = args[0] as String;
+    var transformedCgpa = (cgpa * 100).toInt();
     return Scaffold(
       body: Center(
         child: Container(
           child: Text(
-            " your cgpa is $cgpa",
+            " your cgpa is ${transformedCgpa / 100.0}",
             style: const TextStyle(fontSize: 25),
           ),
         ),

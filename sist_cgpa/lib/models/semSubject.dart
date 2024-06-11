@@ -3,9 +3,12 @@ import 'package:sist_cgpa/models/subject.dart';
 
 class SemSubject {
   final Subject sub;
-  final TextEditingController texController = TextEditingController();
+  late TextEditingController textController;
 
   SemSubject({
     required this.sub,
-  });
+    int? mark,
+  }) {
+    textController = TextEditingController(text: mark?.toString());
+  }
 }

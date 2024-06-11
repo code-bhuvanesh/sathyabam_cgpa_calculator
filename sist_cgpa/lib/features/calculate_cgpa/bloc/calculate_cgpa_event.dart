@@ -4,10 +4,17 @@ part of 'calculate_cgpa_bloc.dart';
 sealed class CalculateCgpaEvent {}
 
 class LoadSubjects extends CalculateCgpaEvent {
-  final String course;
-  LoadSubjects({required this.course});
+  LoadSubjects();
 }
 
-class CalculateGpa extends CalculateCgpaEvent {}
+class CalculateGpa extends CalculateCgpaEvent {
+  final List<SemSubject> subjects;
 
-class CalculateCgpa extends CalculateCgpaEvent {}
+  CalculateGpa({required this.subjects});
+}
+
+class CalculateCgpa extends CalculateCgpaEvent {
+  final Map<int, List<SemSubject>> semsubjects;
+
+  CalculateCgpa({required this.semsubjects});
+}

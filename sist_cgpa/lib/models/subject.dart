@@ -32,7 +32,7 @@ class Subject {
   // final int subPrcaticalHours;
 
   factory Subject.fromJson(Map<String, dynamic> json) {
-    print(json);
+    // print(json);
     return Subject(
       id: json["id"],
       semester: json["semester"],

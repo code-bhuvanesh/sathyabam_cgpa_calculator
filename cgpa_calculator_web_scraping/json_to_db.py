@@ -26,29 +26,11 @@ def create_tables(cursor):
             semester INTEGER,
             coursetype Text,
             coursetitle Text,
-            credit INTEGER
+            credit INTEGER,
+            cae INTEGER,
+            ese INTEGER
         )
     ''')
-
-    cursor.execute(f'''
-        CREATE TABLE IF NOT EXISTS courses (
-            course TEXT PRIMARY KEY, 
-            branch Text,
-            maxsem INTEGER
-        )
-    ''')
-
-    #many-to-many realationship table
-    cursor.execute(f'''
-        CREATE TABLE IF NOT EXISTS course_subjects (
-            course TEXT, 
-            subcode TEXT,
-            FOREIGN KEY (subcode) REFERENCES subjects (subcode),
-            FOREIGN KEY (course) REFERENCES courses (course),
-            PRIMARY KEY (course, subcode)
-        )
-    ''')
-
 
 
 def createSubjectsdb(cursor, subdata):
@@ -60,35 +42,9 @@ def createSubjectsdb(cursor, subdata):
 
         #insert into subjects
         cursor.execute(f'''
-        INSERT INTO subjects (subcode, id, semester, coursetype, coursetitle, credit)
-        VALUES (?, ?, ?, ?, ?, ?)
-    ''', (data["subcode"], data["id"], data["semester"], data["coursetype"],data["coursetitle"],data["credit"]))
-
-def createCoursesdb(cursor, data):
-
-    # Insert data into the table
-    for branch in data:
-        for course, subs in data[branch].items():
-            maxsem = 0
-            for i in subs:
-                if subs[i]['semester'] > maxsem and subs[i]['semester'] <= 10:
-                    maxsem = subs[i]['semester']
-            # print(maxsem)
-            try:
-                # print(course)
-                #insert into courses
-                cursor.execute(f'''
-                INSERT INTO courses (course, branch, maxsem)
-                VALUES (?, ?, ?)
-            ''', (course, branch, maxsem))
-                for subcode in (data[branch][course].keys()):
-                    # print(subcode)
-                    cursor.execute(f'''
-                    INSERT INTO course_subjects (course, subcode)
-                    VALUES (?, ?)
-                ''', (course, subcode))
-            except:
-                print(f"cannot add this course : {course}")
+        INSERT INTO subjects (subcode, id, semester, coursetype, coursetitle, credit, cae, ese)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    ''', (data["subcode"], data["id"], data["semester"], data["coursetype"],data["coursetitle"],data["credit"],data["cae"],data["ese"]))
 
    
 if __name__ == "__main__":
@@ -97,15 +53,9 @@ if __name__ == "__main__":
     cursor = connection.cursor()
 
     create_tables(cursor)
-
     subfile = open("subs.json", "r")
     subdata = json.load(subfile)
-
     createSubjectsdb(cursor, subdata)
-
-    coursefile = open("courses.json", "r")
-    coursedata = json.load(coursefile)
-    createCoursesdb(cursor, coursedata)
 
     connection.commit()
     connection.close()
