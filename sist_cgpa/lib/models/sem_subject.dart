@@ -34,7 +34,7 @@ class SemSubject {
 
   factory SemSubject.fromMap(Map<String, dynamic> map) {
     return SemSubject(
-      sub: Subject.fromMap(map['subject'] as Map<String,dynamic>),
+      sub: Subject.fromMap(map['sub'] as Map<String,dynamic>),
       mark: map['mark'] != null ? map['mark'] as int : null,
     );
   }

@@ -6,6 +6,7 @@ import 'package:sist_cgpa/features/add_subjects/bloc/add_page_bloc.dart';
 import 'package:sist_cgpa/features/login/bloc/login_bloc.dart';
 import 'package:sist_cgpa/features/settings/settings_page.dart';
 import 'package:sist_cgpa/utilites/sqlite_db.dart';
+import 'package:sist_cgpa/utilites/theme.dart';
 
 import '/animations/page_transition_animation.dart';
 import 'features/calculate_cgpa/bloc/calculate_cgpa_bloc.dart';
@@ -35,11 +36,64 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+  static const Map<int, Color> blackSwatch = {
+    50: Color(0xFFFAFAFA),
+    100: Color(0xFFF5F5F5),
+    200: Color(0xFFEEEEEE),
+    300: Color(0xFFE0E0E0),
+    400: Color(0xFFBDBDBD),
+    500: Color(0xFF9E9E9E),
+    600: Color(0xFF757575),
+    700: Color(0xFF616161),
+    800: Color(0xFF424242),
+    900: Color(0xFF212121),
+  };
+  static const MaterialColor blackColor =
+      MaterialColor(0xFF000000, blackSwatch);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'sist cgpa',
-      theme: ThemeData(primarySwatch: Colors.blue, useMaterial3: true),
+      theme: ThemeData(
+        primaryColor: Colors.black,
+        secondaryHeaderColor: Colors.white,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: backgroundColor,
+          scrolledUnderElevation: 1,
+        ),
+        floatingActionButtonTheme: FloatingActionButtonThemeData(
+          backgroundColor: Colors.black,
+          foregroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(200),
+          ),
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.resolveWith(
+            (states) {
+              if (states.contains(MaterialState.pressed)) {
+                return const Color.fromARGB(66, 26, 26, 26);
+              } else if (states.contains(MaterialState.hovered)) {
+                return Colors.black87;
+              } else if (states.contains(MaterialState.focused)) {
+                return Colors.black;
+              } else {
+                return Colors.black;
+              }
+            },
+          ),
+          foregroundColor: MaterialStateProperty.resolveWith(
+            (states) {
+              return Colors.white;
+            },
+          ),
+        )),
+
+        primarySwatch: blackColor,
+        // useMaterial3: true,
+      ),
       initialRoute: LoginPage.routeName,
       debugShowCheckedModeBanner: false,
       onGenerateRoute: (RouteSettings settings) {

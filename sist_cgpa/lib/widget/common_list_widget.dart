@@ -95,7 +95,7 @@ class _CommonListWidgetState extends State<CommonListWidget> {
                     elevation: 3,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8)),
-                    color: Colors.blue,
+                    // color: Colors.blue,
                     child: Center(
                       child: Text(
                         filteredItems[index],

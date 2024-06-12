@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sist_cgpa/models/sem_subject.dart';
 import 'package:sist_cgpa/models/subject.dart';
+import '../../utilites/theme.dart';
 import './bloc/add_page_bloc.dart';
 import 'add_custom_subject.dart';
 
@@ -33,7 +34,7 @@ class _AddSubjectsPageState extends State<AddSubjectsPage> {
     setState(() {
       debugPrint(offset.toString());
       if (offset > 0) {
-        _containerColor = Theme.of(context).secondaryHeaderColor;
+        _containerColor = scrollContainerColor;
       } else {
         _containerColor = Colors.transparent;
       }
@@ -51,7 +52,6 @@ class _AddSubjectsPageState extends State<AddSubjectsPage> {
           ),
         ),
         iconTheme: const IconThemeData(color: Colors.black),
-        backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
       ),
@@ -64,41 +64,44 @@ class _AddSubjectsPageState extends State<AddSubjectsPage> {
               });
             }
           },
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                color: _containerColor,
-                padding: const EdgeInsets.all(8.0),
-                child: TextField(
-                  controller: addTextController,
-                  onChanged: (s) => context.read<AddSubjectBloc>().add(
-                        SearchSubjectEvent(searchText: s),
+          child: Container(
+            color: backgroundColor,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  color: _containerColor,
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextField(
+                    controller: addTextController,
+                    onChanged: (s) => context.read<AddSubjectBloc>().add(
+                          SearchSubjectEvent(searchText: s),
+                        ),
+                    decoration: InputDecoration(
+                      hintText: "Search by Subject name or subject code",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
                       ),
-                  decoration: InputDecoration(
-                    hintText: "Search by Subject name or subject code",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
                     ),
                   ),
                 ),
-              ),
-              Expanded(
-                child: ListView.builder(
-                  padding: const EdgeInsets.all(8.0),
-                  controller: _scrollController,
-                  itemBuilder: (_, index) {
-                    if (index == 0) {
-                      return addCustomSubjectButtton(context);
-                    }
-                    return AddSubjectTile(
-                      subject: subjectsList[index],
-                    );
-                  },
-                  itemCount: subjectsList.length + 1,
+                Expanded(
+                  child: ListView.builder(
+                    padding: const EdgeInsets.all(8.0),
+                    controller: _scrollController,
+                    itemBuilder: (_, index) {
+                      if (index == 0) {
+                        return addCustomSubjectButtton(context);
+                      }
+                      return AddSubjectTile(
+                        subject: subjectsList[index],
+                      );
+                    },
+                    itemCount: subjectsList.length + 1,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -280,7 +283,7 @@ class _AddSubjectTileState extends State<AddSubjectTile> {
         }
       },
       child: Card(
-        color: Theme.of(context).dialogBackgroundColor,
+        color: Theme.of(context).secondaryHeaderColor,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(

@@ -49,6 +49,7 @@ class _SubjectItemState extends State<SubjectItem> {
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     return Card(
+      // color: Colors.white,
       margin: const EdgeInsets.symmetric(
         vertical: 5,
         horizontal: 10,
@@ -85,7 +86,7 @@ class _SubjectItemState extends State<SubjectItem> {
                     width: 60,
                     height: 40,
                     child: TextField(
-                      textAlignVertical: TextAlignVertical.center,
+                      textAlignVertical: TextAlignVertical.bottom,
                       controller: widget.tec,
                       keyboardType: const TextInputType.numberWithOptions(),
                       textAlign: TextAlign.center,
@@ -105,7 +106,7 @@ class _SubjectItemState extends State<SubjectItem> {
                     onPressed: widget.onDelete,
                     icon: const Icon(
                       Icons.delete,
-                      color: Colors.red,
+                      color: Colors.black,
                     ),
                   )
                 ],

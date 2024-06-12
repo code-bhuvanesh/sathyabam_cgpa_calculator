@@ -1,0 +1,62 @@
+Date : 2024-06-12 21:57:38
+Directory : d:\Projects\my_projects\Flutter_projects\cgpa_calculator\sist_cgpa
+Total : 19 files,  368 codes, 47 comments, 32 blanks, all 447 lines
+
+Languages
++-------------------------+------------+------------+------------+------------+------------+
+| language                | files      | code       | comment    | blank      | total      |
++-------------------------+------------+------------+------------+------------+------------+
+| Dart                    |         18 |        420 |         47 |         32 |        499 |
+| sqlite3-editor-database |          1 |        -52 |          0 |          0 |        -52 |
++-------------------------+------------+------------+------------+------------+------------+
+
+Directories
++------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                                         | files      | code       | comment    | blank      | total      |
++------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                                            |         19 |        368 |         47 |         32 |        447 |
+| assets                                                                                                                       |          1 |        -52 |          0 |          0 |        -52 |
+| lib                                                                                                                          |         18 |        420 |         47 |         32 |        499 |
+| lib (Files)                                                                                                                  |          1 |         14 |          0 |          1 |         15 |
+| lib\features                                                                                                                 |         11 |        329 |         29 |         15 |        373 |
+| lib\features\add_subjects                                                                                                    |          3 |        212 |          6 |          8 |        226 |
+| lib\features\add_subjects (Files)                                                                                            |          2 |        212 |          5 |          7 |        224 |
+| lib\features\add_subjects\bloc                                                                                               |          1 |          0 |          1 |          1 |          2 |
+| lib\features\calculate_cgpa                                                                                                  |          2 |         73 |         14 |          3 |         90 |
+| lib\features\calculate_cgpa (Files)                                                                                          |          1 |         43 |          4 |          0 |         47 |
+| lib\features\calculate_cgpa\bloc                                                                                             |          1 |         30 |         10 |          3 |         43 |
+| lib\features\choose_branch                                                                                                   |          2 |         -2 |          0 |          0 |         -2 |
+| lib\features\login                                                                                                           |          2 |          6 |          9 |         -1 |         14 |
+| lib\features\login (Files)                                                                                                   |          1 |          2 |          8 |          1 |         11 |
+| lib\features\login\bloc                                                                                                      |          1 |          4 |          1 |         -2 |          3 |
+| lib\features\settings                                                                                                        |          1 |         42 |          0 |          5 |         47 |
+| lib\features\show_cgpa                                                                                                       |          1 |         -2 |          0 |          0 |         -2 |
+| lib\models                                                                                                                   |          3 |         32 |          2 |         11 |         45 |
+| lib\utilites                                                                                                                 |          3 |         45 |         16 |          5 |         66 |
++------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++------------------------------------------------------------------------------------------------------------------------------+-------------------------+------------+------------+------------+------------+
+| filename                                                                                                                     | language                | code       | comment    | blank      | total      |
++------------------------------------------------------------------------------------------------------------------------------+-------------------------+------------+------------+------------+------------+
+| d:\Projects\my_projects\Flutter_projects\cgpa_calculator\sist_cgpa\assets\courses.sqlite                                     | sqlite3-editor-database |        -52 |          0 |          0 |        -52 |
+| d:\Projects\my_projects\Flutter_projects\cgpa_calculator\sist_cgpa\lib\features\add_subjects\add_custom_subject.dart         | Dart                    |        140 |          1 |          6 |        147 |
+| d:\Projects\my_projects\Flutter_projects\cgpa_calculator\sist_cgpa\lib\features\add_subjects\add_subjects_page.dart          | Dart                    |         72 |          4 |          1 |         77 |
+| d:\Projects\my_projects\Flutter_projects\cgpa_calculator\sist_cgpa\lib\features\add_subjects\bloc\add_page_bloc.dart         | Dart                    |          0 |          1 |          1 |          2 |
+| d:\Projects\my_projects\Flutter_projects\cgpa_calculator\sist_cgpa\lib\features\calculate_cgpa\bloc\calculate_cgpa_bloc.dart | Dart                    |         30 |         10 |          3 |         43 |
+| d:\Projects\my_projects\Flutter_projects\cgpa_calculator\sist_cgpa\lib\features\calculate_cgpa\calculate_cgpa_page.dart      | Dart                    |         43 |          4 |          0 |         47 |
+| d:\Projects\my_projects\Flutter_projects\cgpa_calculator\sist_cgpa\lib\features\choose_branch\Choose_branch_page.dart        | Dart                    |        -57 |          0 |         -8 |        -65 |
+| d:\Projects\my_projects\Flutter_projects\cgpa_calculator\sist_cgpa\lib\features\choose_branch\choose_branch_page.dart        | Dart                    |         55 |          0 |          8 |         63 |
+| d:\Projects\my_projects\Flutter_projects\cgpa_calculator\sist_cgpa\lib\features\login\bloc\login_bloc.dart                   | Dart                    |          4 |          1 |         -2 |          3 |
+| d:\Projects\my_projects\Flutter_projects\cgpa_calculator\sist_cgpa\lib\features\login\login_page.dart                        | Dart                    |          2 |          8 |          1 |         11 |
+| d:\Projects\my_projects\Flutter_projects\cgpa_calculator\sist_cgpa\lib\features\settings\settings_page.dart                  | Dart                    |         42 |          0 |          5 |         47 |
+| d:\Projects\my_projects\Flutter_projects\cgpa_calculator\sist_cgpa\lib\features\show_cgpa\show_cgpa_page.dart                | Dart                    |         -2 |          0 |          0 |         -2 |
+| d:\Projects\my_projects\Flutter_projects\cgpa_calculator\sist_cgpa\lib\main.dart                                             | Dart                    |         14 |          0 |          1 |         15 |
+| d:\Projects\my_projects\Flutter_projects\cgpa_calculator\sist_cgpa\lib\models\semSubject.dart                                | Dart                    |        -17 |          0 |         -4 |        -21 |
+| d:\Projects\my_projects\Flutter_projects\cgpa_calculator\sist_cgpa\lib\models\sem_subject.dart                               | Dart                    |         33 |          1 |         10 |         44 |
+| d:\Projects\my_projects\Flutter_projects\cgpa_calculator\sist_cgpa\lib\models\subject.dart                                   | Dart                    |         16 |          1 |          5 |         22 |
+| d:\Projects\my_projects\Flutter_projects\cgpa_calculator\sist_cgpa\lib\utilites\commonFuntions.dart                          | Dart                    |          0 |          0 |         -1 |         -1 |
+| d:\Projects\my_projects\Flutter_projects\cgpa_calculator\sist_cgpa\lib\utilites\secure_storage.dart                          | Dart                    |         38 |         10 |          5 |         53 |
+| d:\Projects\my_projects\Flutter_projects\cgpa_calculator\sist_cgpa\lib\utilites\sqlite_db.dart                               | Dart                    |          7 |          6 |          1 |         14 |
+| Total                                                                                                                        |                         |        368 |         47 |         32 |        447 |
++------------------------------------------------------------------------------------------------------------------------------+-------------------------+------------+------------+------------+------------+

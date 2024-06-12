@@ -4,6 +4,7 @@ import 'package:sist_cgpa/features/calculate_cgpa/bloc/calculate_cgpa_bloc.dart'
 import 'package:sist_cgpa/features/settings/settings_page.dart';
 import 'package:sist_cgpa/features/show_cgpa/show_cgpa_page.dart';
 import 'package:sist_cgpa/models/sem_subject.dart';
+import 'package:sist_cgpa/utilites/theme.dart';
 
 import '../../widget/subject_wiget.dart';
 import '/models/course.dart';
@@ -58,7 +59,7 @@ class _CalculateGpaPageState extends State<CalculateGpaPage>
     setState(() {
       // debugPrint(offset);
       if (offset > 0) {
-        _containerColor = Theme.of(context).secondaryHeaderColor;
+        _containerColor = scrollContainerColor;
       } else {
         _containerColor = Colors.transparent;
       }
@@ -72,8 +73,8 @@ class _CalculateGpaPageState extends State<CalculateGpaPage>
         title: const Text(
           "CGPA calculator",
           style: TextStyle(
-            color: Colors.black,
-          ),
+              // color: Colors.black,
+              ),
         ),
         actions: [
           IconButton(
@@ -83,8 +84,8 @@ class _CalculateGpaPageState extends State<CalculateGpaPage>
             icon: const Icon(Icons.settings),
           )
         ],
-        iconTheme: const IconThemeData(color: Colors.black),
-        backgroundColor: Colors.transparent,
+        // iconTheme: const IconThemeData(color: Colors.black),
+        // backgroundColor: Colors.transparent,
         elevation: 0,
         // centerTitle: true,
       ),
@@ -114,96 +115,99 @@ class _CalculateGpaPageState extends State<CalculateGpaPage>
             );
           }
         },
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Container(
-              margin: EdgeInsets.zero,
-              color: _containerColor,
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  arrowButton(isLeftButton: true),
-                  Card(
-                    color: Theme.of(context).primaryColorLight,
-                    elevation: 5,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 6, horizontal: 10),
-                        child: Text(
-                          "Semmester $currSem",
-                          style: const TextStyle(
-                            fontSize: 20,
-                            // color: Colors.white,
-                          ),
-                        )),
-                  ),
-                  arrowButton(isLeftButton: false),
-                ],
-              ),
-            ),
-            Expanded(
-              child: (semSubjects.keys.contains(currSem))
-                  ? ListView.builder(
-                      controller: _scrollController,
-                      itemBuilder: (_, index) {
-                        var semSubject = semSubjects[currSem]![index];
-                        return SubjectItem(
-                          subject: semSubject.sub,
-                          tec: semSubject.textController,
-                          onDelete: () {
-                            setState(() {
-                              semSubjects[currSem]!.removeAt(index);
-                            });
-                            context.read<CalculateCgpaBloc>().add(
-                                  CalculateGpa(
-                                    subjects: semSubjects[currSem]!,
-                                  ),
-                                );
-                          },
-                        );
-                      },
-                      itemCount: semSubjects[currSem]!.length,
-                    )
-                  : const Center(
-                      child: Text(
-                        "Add some subjects to calculate CGPA",
-                      ),
-                    ),
-            ),
-            (semSubjects.keys.contains(currSem) &&
-                    semSubjects[currSem]!.isNotEmpty)
-                ? Padding(
-                    padding: const EdgeInsets.only(bottom: 20),
-                    child: Column(
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.all(20),
+        child: Container(
+          color: backgroundColor,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Container(
+                margin: EdgeInsets.zero,
+                color: _containerColor,
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    arrowButton(isLeftButton: true),
+                    Card(
+                      color: Theme.of(context).primaryColor,
+                      elevation: 5,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 6, horizontal: 10),
                           child: Text(
-                            "Semester $currSem GPA : ${curGpa.toStringAsFixed(2)}",
-                            style: const TextStyle(fontSize: 20),
-                          ),
-                        ),
-                        ElevatedButton(
-                          onPressed: () {
-                            context.read<CalculateCgpaBloc>().add(
-                                  CalculateCgpa(
-                                    semsubjects: semSubjects,
-                                  ),
-                                );
-                          },
-                          child: const Text(
-                            "Calculate CGPA",
-                          ),
-                        )
-                      ],
+                            "Semmester $currSem",
+                            style: const TextStyle(
+                              fontSize: 20,
+                              color: Colors.white,
+                            ),
+                          )),
                     ),
-                  )
-                : const SizedBox.shrink()
-          ],
+                    arrowButton(isLeftButton: false),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: (semSubjects.keys.contains(currSem))
+                    ? ListView.builder(
+                        controller: _scrollController,
+                        itemBuilder: (_, index) {
+                          var semSubject = semSubjects[currSem]![index];
+                          return SubjectItem(
+                            subject: semSubject.sub,
+                            tec: semSubject.textController,
+                            onDelete: () {
+                              setState(() {
+                                semSubjects[currSem]!.removeAt(index);
+                              });
+                              context.read<CalculateCgpaBloc>().add(
+                                    CalculateGpa(
+                                      subjects: semSubjects[currSem]!,
+                                    ),
+                                  );
+                            },
+                          );
+                        },
+                        itemCount: semSubjects[currSem]!.length,
+                      )
+                    : const Center(
+                        child: Text(
+                          "Add some subjects to calculate CGPA",
+                        ),
+                      ),
+              ),
+              (semSubjects.keys.contains(currSem) &&
+                      semSubjects[currSem]!.isNotEmpty)
+                  ? Padding(
+                      padding: const EdgeInsets.only(bottom: 20),
+                      child: Column(
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.all(20),
+                            child: Text(
+                              "Semester $currSem GPA : ${curGpa.toStringAsFixed(2)}",
+                              style: const TextStyle(fontSize: 20),
+                            ),
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              context.read<CalculateCgpaBloc>().add(
+                                    CalculateCgpa(
+                                      semsubjects: semSubjects,
+                                    ),
+                                  );
+                            },
+                            child: const Text(
+                              "Calculate CGPA",
+                            ),
+                          )
+                        ],
+                      ),
+                    )
+                  : const SizedBox.shrink()
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -236,7 +240,7 @@ class _CalculateGpaPageState extends State<CalculateGpaPage>
 
   Card arrowButton({required bool isLeftButton}) {
     return Card(
-      color: Theme.of(context).primaryColorLight,
+      color: Theme.of(context).primaryColor,
       elevation: 5,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
       child: IconButton(
@@ -246,7 +250,7 @@ class _CalculateGpaPageState extends State<CalculateGpaPage>
               : (currSem == totalSem)
                   ? Icons.add
                   : Icons.arrow_right,
-          // color: Colors.white,
+          color: Colors.white,
           size: 30,
         ),
         onPressed: () {
