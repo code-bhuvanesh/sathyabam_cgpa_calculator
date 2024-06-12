@@ -5,12 +5,13 @@
 ///
 /// The bloc then emits a [SubjectsLoaded] state with the loaded subjects. Other blocs can listen
 /// to this state to get the subject data for calculating CGPA.
+// ignore_for_file: depend_on_referenced_packages
+
 import 'dart:async';
 import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
 import 'package:sist_cgpa/constants.dart';
 import 'package:sist_cgpa/utilites/secure_storage.dart';
 import 'package:http/http.dart' as http;

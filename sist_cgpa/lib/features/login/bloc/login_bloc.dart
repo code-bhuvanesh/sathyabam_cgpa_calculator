@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 
+// ignore: depend_on_referenced_packages
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../constants.dart';

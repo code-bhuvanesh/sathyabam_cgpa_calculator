@@ -1,7 +1,10 @@
+// ignore_for_file: unnecessary_import
+
 import 'dart:typed_data';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+// ignore: depend_on_referenced_packages
 import 'package:path/path.dart';
 import 'package:sist_cgpa/models/subject.dart';
 import 'package:sqflite/sqflite.dart';
@@ -31,7 +34,9 @@ class SqliteDB {
     if (exists) {
       try {
         await File(path).delete();
-      } catch (e) {}
+      } catch (e) {
+        debugPrint(e.toString());
+      }
     }
     exists = await databaseExists(path);
     /* ************************** */

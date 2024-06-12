@@ -8,6 +8,7 @@ import '../models/sem_subject.dart';
 class SecureStorage {
   static const _storage = FlutterSecureStorage();
 
+  // ignore: unused_element
   Future<Map<String, String>> _readAll() async {
     var map = <String, String>{};
     try {
@@ -115,6 +116,7 @@ class SecureStorage {
   //       accessibility: IOSAccessibility.first_unlock,
   //     );
 
+  // ignore: unused_element
   AndroidOptions _getAndroidOptions() => const AndroidOptions(
         encryptedSharedPreferences: true,
       );
