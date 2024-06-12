@@ -53,7 +53,7 @@ class _CalculateGpaPageState extends State<CalculateGpaPage>
   }
 
   late ScrollController _scrollController;
-  Color _containerColor = Colors.transparent;
+  Color _containerColor = backgroundColor;
   void _onScroll() {
     double offset = _scrollController.offset;
     setState(() {
@@ -61,7 +61,7 @@ class _CalculateGpaPageState extends State<CalculateGpaPage>
       if (offset > 0) {
         _containerColor = scrollContainerColor;
       } else {
-        _containerColor = Colors.transparent;
+        _containerColor = backgroundColor;
       }
     });
   }
@@ -81,7 +81,10 @@ class _CalculateGpaPageState extends State<CalculateGpaPage>
             onPressed: () {
               Navigator.of(context).pushNamed(SetttingsPage.routeName);
             },
-            icon: const Icon(Icons.settings),
+            icon: const Icon(
+              Icons.settings,
+              color: Colors.black,
+            ),
           )
         ],
         // iconTheme: const IconThemeData(color: Colors.black),
@@ -121,8 +124,21 @@ class _CalculateGpaPageState extends State<CalculateGpaPage>
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Container(
-                margin: EdgeInsets.zero,
-                color: _containerColor,
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(20),
+                    bottomRight: Radius.circular(20),
+                  ),
+                  color: _containerColor,
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Colors.grey,
+                      spreadRadius: 2,
+                      blurRadius: 3.0,
+                    ),
+                  ],
+                ),
+                margin: const EdgeInsets.only(bottom: 8),
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -179,7 +195,22 @@ class _CalculateGpaPageState extends State<CalculateGpaPage>
               ),
               (semSubjects.keys.contains(currSem) &&
                       semSubjects[currSem]!.isNotEmpty)
-                  ? Padding(
+                  ? Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20),
+                        ),
+                        color: _containerColor,
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Colors.grey,
+                            spreadRadius: 2,
+                            blurRadius: 3.0,
+                          ),
+                        ],
+                      ),
                       padding: const EdgeInsets.only(bottom: 20),
                       child: Column(
                         children: [

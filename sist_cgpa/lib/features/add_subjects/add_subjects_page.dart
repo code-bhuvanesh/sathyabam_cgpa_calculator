@@ -36,7 +36,7 @@ class _AddSubjectsPageState extends State<AddSubjectsPage> {
       if (offset > 0) {
         _containerColor = scrollContainerColor;
       } else {
-        _containerColor = Colors.transparent;
+        _containerColor = backgroundColor;
       }
     });
   }

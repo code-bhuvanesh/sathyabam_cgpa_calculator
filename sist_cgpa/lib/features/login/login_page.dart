@@ -2,7 +2,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:sist_cgpa/features/login/bloc/login_bloc.dart';
+import 'package:sist_cgpa/utilites/theme.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
@@ -45,7 +47,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: const Color.fromARGB(255, 237, 240, 255),
+        color: backgroundColor,
         child: SafeArea(
           child: BlocListener<LoginBloc, LoginState>(
             listener: (context, state) {
@@ -140,7 +142,7 @@ class _LoginPageState extends State<LoginPage> {
                             child: const Text(
                               "skip",
                               style: TextStyle(
-                                // color: Colors.white,
+                                color: Color.fromARGB(255, 114, 114, 114),
                                 fontSize: 18,
                               ),
                             ),
@@ -149,7 +151,7 @@ class _LoginPageState extends State<LoginPage> {
                           const Padding(
                             padding: EdgeInsets.all(50),
                             child: Text(
-                              "Made by BHUVANESH",
+                              "Made by Bhuvanesh",
                               style: TextStyle(
                                 // color: Colors.white,
                                 fontSize: 20,
@@ -171,15 +173,30 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget logo() {
     return Container(
-      padding: const EdgeInsets.only(top: 40),
-      child: const Text(
-        "CGPA\ncalulator",
-        textAlign: TextAlign.center,
-        style: TextStyle(
-          fontSize: 50,
-          fontWeight: FontWeight.w900,
-          // color: Color.fromARGB(255, 3, 8, 87),
-        ),
+      padding: const EdgeInsets.symmetric(
+          // vertical: 40,
+          // horizontal: 100,
+          ),
+      child: Column(
+        children: [
+          SizedBox(
+            // height: 150,
+            // width: 150,
+            child: Lottie.asset(
+              "assets/hat_anim.json",
+              height: MediaQuery.of(context).size.height * 0.13,
+            ),
+          ),
+          const Text(
+            "SIST CGPA",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 50,
+              fontWeight: FontWeight.w900,
+              // color: Color.fromARGB(255, 3, 8, 87),
+            ),
+          ),
+        ],
       ),
     );
   }

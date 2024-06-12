@@ -34,13 +34,27 @@ class _SetttingsPageState extends State<SetttingsPage> {
         elevation: 0,
         centerTitle: true,
       ),
-      body: Center(
-          child: ElevatedButton(
-        onPressed: logout,
-        child: const Text(
-          "logout",
+      body: SizedBox(
+        width: double.infinity,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Text(
+              "Credits\nDevloped By Bhuvanesh (2021-2025) Batch",
+            ),
+            const SizedBox(
+              height: 50,
+            ),
+            ElevatedButton(
+              onPressed: logout,
+              child: const Text(
+                "logout",
+              ),
+            ),
+          ],
         ),
-      )),
+      ),
     );
   }
 }
