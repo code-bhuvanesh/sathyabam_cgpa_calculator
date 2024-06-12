@@ -22,7 +22,7 @@ class _SubjectItemState extends State<SubjectItem> {
   bool validate = false;
 
   void validateField(String? txt) {
-    print("validating");
+    debugPrint("validating");
     if (txt != null && txt.isNotEmpty) {
       final int mark = int.parse(txt);
       if (mark > 100) {
@@ -54,7 +54,7 @@ class _SubjectItemState extends State<SubjectItem> {
         horizontal: 10,
       ),
       child: Container(
-        margin: EdgeInsets.symmetric(vertical: 10),
+        margin: const EdgeInsets.symmetric(vertical: 10),
         padding: const EdgeInsets.only(left: 15),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

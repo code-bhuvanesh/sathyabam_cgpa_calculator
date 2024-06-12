@@ -1,10 +1,8 @@
-import 'dart:convert';
-
-import '../../utilites/sqlite_db.dart';
-import '../choose_course/choose_course_page.dart';
 import '/widget/common_list_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+
+import '../choose_course/choose_course_page.dart';
+import '../../utilites/sqlite_db.dart';
 
 class ChooseBranch extends StatefulWidget {
   const ChooseBranch({super.key});

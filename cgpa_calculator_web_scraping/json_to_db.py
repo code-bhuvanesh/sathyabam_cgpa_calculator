@@ -27,8 +27,7 @@ def create_tables(cursor):
             coursetype Text,
             coursetitle Text,
             credit INTEGER,
-            cae INTEGER,
-            ese INTEGER
+            maxmark INTEGER
         )
     ''')
 
@@ -42,9 +41,9 @@ def createSubjectsdb(cursor, subdata):
 
         #insert into subjects
         cursor.execute(f'''
-        INSERT INTO subjects (subcode, id, semester, coursetype, coursetitle, credit, cae, ese)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-    ''', (data["subcode"], data["id"], data["semester"], data["coursetype"],data["coursetitle"],data["credit"],data["cae"],data["ese"]))
+        INSERT INTO subjects (subcode, id, semester, coursetype, coursetitle, credit, maxmark)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+    ''', (data["subcode"], data["id"], data["semester"], data["coursetype"],data["coursetitle"],data["credit"],int(data["cae"]) + int(data["ese"])))
 
    
 if __name__ == "__main__":

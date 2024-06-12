@@ -9,12 +9,11 @@ import 'package:sist_cgpa/utilites/sqlite_db.dart';
 
 import '/animations/page_transition_animation.dart';
 import 'features/calculate_cgpa/bloc/calculate_cgpa_bloc.dart';
-import 'features/choose_branch/Choose_branch_page.dart';
+import 'features/choose_branch/choose_branch_page.dart';
 import 'features/calculate_cgpa/calculate_cgpa_page.dart';
 import 'features/choose_course/choose_course_page.dart';
 import 'features/login/login_page.dart';
 import 'features/show_cgpa/show_cgpa_page.dart';
-import 'features/splash_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {

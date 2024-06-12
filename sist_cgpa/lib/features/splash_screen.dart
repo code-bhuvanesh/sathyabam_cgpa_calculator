@@ -16,7 +16,7 @@ class SplashScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         // crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SizedBox.shrink(),
+          const SizedBox.shrink(),
           Center(
               child: Column(
             children: [
@@ -30,7 +30,7 @@ class SplashScreen extends StatelessWidget {
                   animatedTexts: [
                     TypewriterAnimatedText(
                       "CGPA",
-                      speed: Duration(milliseconds: 200),
+                      speed: const Duration(milliseconds: 200),
                     )
                   ],
                   totalRepeatCount: 1,
@@ -48,7 +48,7 @@ class SplashScreen extends StatelessWidget {
                 child: AnimatedTextKit(
                   animatedTexts: [
                     TypewriterAnimatedText("Calculator",
-                        speed: Duration(milliseconds: 100)),
+                        speed: const Duration(milliseconds: 100)),
                   ],
                   totalRepeatCount: 1,
                   // textAlign: TextAlign.center,
@@ -56,7 +56,7 @@ class SplashScreen extends StatelessWidget {
               ),
             ],
           )),
-          Center(
+          const Center(
               child: Padding(
             padding: EdgeInsets.all(20.0),
             child: Text(

@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart';
 import 'package:sist_cgpa/models/subject.dart';
@@ -37,7 +38,7 @@ class SqliteDB {
 
     if (!exists) {
       // Should happen only the first time you launch your application
-      print("Creating new copy from asset");
+      debugPrint("Creating new copy from asset");
       // Make sure the parent directory exists
       try {
         await Directory(dirname(path)).create(recursive: true);
@@ -52,12 +53,12 @@ class SqliteDB {
       // Write and flush the bytes written
       await File(path).writeAsBytes(bytes, flush: true);
     } else {
-      print("Opening existing database");
+      debugPrint("Opening existing database");
     }
 
 // open the database
     _db = await openDatabase(path, readOnly: true);
-    print("database : $_db");
+    debugPrint("database : $_db");
     return _db;
   }
 
@@ -94,8 +95,8 @@ class SqliteDB {
         .rawQuery("SELECT * FROM courses where course=?", [course]))[0];
     var subjectsQuery = await _db
         .rawQuery("SELECT * FROM course_subjects where course=?", [course]);
-    print(courseQuery);
-    print(subjectsQuery[0]);
+    debugPrint(courseQuery.toString());
+    debugPrint(subjectsQuery[0].toString());
 
     List<Subject> subjects = [];
     for (var sub in subjectsQuery) {
@@ -131,10 +132,10 @@ class SqliteDB {
     whereArgs.clear();
     //this is used when online seearch both where subject code and name is given
     whereClause = 'coursetitle LIKE ?';
-    var subjectData = "";
-    keywords.sublist(1).forEach((element) {
-      subjectData += "$element ";
-    });
+    // var subjectData = "";
+    // keywords.sublist(1).forEach((element) {
+    //   subjectData += "$element ";
+    // });
     whereArgs.add('%${keywords.sublist(1).join(" ")}%');
 
     whereClause += ' OR coursetitle LIKE ?';
@@ -154,14 +155,14 @@ class SqliteDB {
     //         "SELECT * from subjects where subcode like ?", ["%$searchText%"]))
     //     .map((e) => Subject.fromJson(e.cast<String, dynamic>()))
     //     .toList();
-    print(whereClause);
-    print(whereArgs);
+    debugPrint(whereClause);
+    debugPrint(whereArgs.toString());
     var sub = results
         .map((e) => Subject.fromJson(e.cast<String, dynamic>()))
         .toList();
     //
     // return Subject.fromJson(sub);
-    // print("searched subjects len ${sub.length} $sub ");
+    // debugPrint("searched subjects len ${sub.length} $sub ");
     return sub;
   }
 }

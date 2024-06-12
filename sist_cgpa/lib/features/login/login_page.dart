@@ -1,17 +1,12 @@
-import 'dart:convert';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:sist_cgpa/features/login/bloc/login_bloc.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
-import '../choose_branch/Choose_branch_page.dart';
 import '../calculate_cgpa/calculate_cgpa_page.dart';
-import '../../constants.dart';
-import '../../utilites/secure_storage.dart';
 import '../../utilites/utils.dart';
 
 class LoginPage extends StatefulWidget {
@@ -50,7 +45,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: Color.fromARGB(255, 237, 240, 255),
+        color: const Color.fromARGB(255, 237, 240, 255),
         child: SafeArea(
           child: BlocListener<LoginBloc, LoginState>(
             listener: (context, state) {

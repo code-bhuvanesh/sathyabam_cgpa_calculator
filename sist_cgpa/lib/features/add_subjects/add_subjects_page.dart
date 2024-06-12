@@ -1,9 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sist_cgpa/models/sem_subject.dart';
 import 'package:sist_cgpa/models/subject.dart';
 import './bloc/add_page_bloc.dart';
+import 'add_custom_subject.dart';
 
 class AddSubjectsPage extends StatefulWidget {
   const AddSubjectsPage({super.key});
@@ -30,7 +31,7 @@ class _AddSubjectsPageState extends State<AddSubjectsPage> {
   void _onScroll() {
     double offset = _scrollController.offset;
     setState(() {
-      print(offset);
+      debugPrint(offset.toString());
       if (offset > 0) {
         _containerColor = Theme.of(context).secondaryHeaderColor;
       } else {
@@ -86,9 +87,64 @@ class _AddSubjectsPageState extends State<AddSubjectsPage> {
                 child: ListView.builder(
                   padding: const EdgeInsets.all(8.0),
                   controller: _scrollController,
-                  itemBuilder: (_, index) =>
-                      AddSubjectTile(subject: subjectsList[index]),
-                  itemCount: subjectsList.length,
+                  itemBuilder: (_, index) {
+                    if (index == 0) {
+                      return addCustomSubjectButtton(context);
+                    }
+                    return AddSubjectTile(
+                      subject: subjectsList[index],
+                    );
+                  },
+                  itemCount: subjectsList.length + 1,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget addCustomSubjectButtton(BuildContext context) {
+    return GestureDetector(
+      onTap: () async {
+        var result = await showDialog(
+          context: context,
+          builder: (context) => const Dialog(
+            child: AddCustomSubjectDialog(),
+          ),
+        );
+        // ignore: use_build_context_synchronously
+        if (result != null) Navigator.of(context).pop(result);
+      },
+      child: Card(
+        elevation: 5,
+        color: Theme.of(context).primaryColor,
+        child: SizedBox(
+          height: 50,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                margin: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(100),
+                  border: Border.all(
+                    width: 2,
+                    color: Colors.white,
+                  ),
+                ),
+                child: const Icon(
+                  Icons.add,
+                  color: Colors.white,
+                ),
+              ),
+              const Text(
+                "Add Custom Subject",
+                style: TextStyle(
+                  color: Colors.white,
                 ),
               ),
             ],
@@ -114,7 +170,7 @@ class _AddSubjectTileState extends State<AddSubjectTile> {
   var validate = false;
 
   void validateField(String? txt) {
-    print("validating");
+    debugPrint("validating");
     if (txt != null && txt.isNotEmpty) {
       final int mark = int.parse(txt);
       if (mark > 100) {
@@ -144,7 +200,7 @@ class _AddSubjectTileState extends State<AddSubjectTile> {
     );
     return GestureDetector(
       onTap: () async {
-        var ScoreController = TextEditingController();
+        var scoreController = TextEditingController();
         await showDialog(
           context: context,
           builder: (context) => Dialog(
@@ -185,7 +241,7 @@ class _AddSubjectTileState extends State<AddSubjectTile> {
                     // ),
                     child: TextField(
                       textAlignVertical: TextAlignVertical.center,
-                      controller: ScoreController,
+                      controller: scoreController,
                       keyboardType: const TextInputType.numberWithOptions(),
                       textAlign: TextAlign.center,
                       inputFormatters: [
@@ -202,7 +258,7 @@ class _AddSubjectTileState extends State<AddSubjectTile> {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      if (ScoreController.text.isNotEmpty) {
+                      if (scoreController.text.isNotEmpty) {
                         Navigator.of(context).pop();
                       }
                     },
@@ -213,10 +269,14 @@ class _AddSubjectTileState extends State<AddSubjectTile> {
             ),
           ),
         );
-        if (ScoreController.text.isNotEmpty) {
+        if (scoreController.text.isNotEmpty) {
           // ignore: use_build_context_synchronously
-          Navigator.of(context)
-              .pop([widget.subject, int.parse(ScoreController.text)]);
+          Navigator.of(context).pop(
+            SemSubject(
+              sub: widget.subject,
+              mark: int.parse(scoreController.text),
+            ),
+          );
         }
       },
       child: Card(
@@ -234,10 +294,8 @@ class _AddSubjectTileState extends State<AddSubjectTile> {
                 ),
               ),
               Text(
-                textAlign: TextAlign.center,
                 widget.subject.subName,
                 style: const TextStyle(
-
                     // color: Colors.white,
                     ),
               ),

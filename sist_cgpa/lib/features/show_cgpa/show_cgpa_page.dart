@@ -10,11 +10,9 @@ class ShowCgpa extends StatelessWidget {
     var transformedCgpa = (cgpa * 100).toInt();
     return Scaffold(
       body: Center(
-        child: Container(
-          child: Text(
-            " your cgpa is ${transformedCgpa / 100.0}",
-            style: const TextStyle(fontSize: 25),
-          ),
+        child: Text(
+          " your cgpa is ${transformedCgpa / 100.0}",
+          style: const TextStyle(fontSize: 25),
         ),
       ),
     );

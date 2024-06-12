@@ -3,8 +3,7 @@ import 'package:sist_cgpa/features/add_subjects/add_subjects_page.dart';
 import 'package:sist_cgpa/features/calculate_cgpa/bloc/calculate_cgpa_bloc.dart';
 import 'package:sist_cgpa/features/settings/settings_page.dart';
 import 'package:sist_cgpa/features/show_cgpa/show_cgpa_page.dart';
-import 'package:sist_cgpa/models/semSubject.dart';
-import 'package:sist_cgpa/models/subject.dart';
+import 'package:sist_cgpa/models/sem_subject.dart';
 
 import '../../widget/subject_wiget.dart';
 import '/models/course.dart';
@@ -57,7 +56,7 @@ class _CalculateGpaPageState extends State<CalculateGpaPage>
   void _onScroll() {
     double offset = _scrollController.offset;
     setState(() {
-      // print(offset);
+      // debugPrint(offset);
       if (offset > 0) {
         _containerColor = Theme.of(context).secondaryHeaderColor;
       } else {
@@ -90,14 +89,14 @@ class _CalculateGpaPageState extends State<CalculateGpaPage>
         // centerTitle: true,
       ),
       body: BlocListener<CalculateCgpaBloc, CalculateCgpaState>(
-        listener: (context, state) {
+        listener: (context, state) async {
           if (state is SubjectsLoaded) {
             for (var element in state.semSubjects.keys) {
               if (element > totalSem) {
                 totalSem = element;
               }
             }
-            print("total sem : $totalSem");
+            debugPrint("total sem : $totalSem");
             setState(() {
               semSubjects = state.semSubjects;
               totalSem = totalSem;
@@ -106,6 +105,8 @@ class _CalculateGpaPageState extends State<CalculateGpaPage>
             setState(() {
               curGpa = state.gpa;
             });
+            await SecureStorage().saveSemSubjects(
+                semSubjects); //when ever a new subject is added
           } else if (state is CgpaResult) {
             Navigator.of(context).pushNamed(
               ShowCgpa.routeName,
@@ -207,25 +208,25 @@ class _CalculateGpaPageState extends State<CalculateGpaPage>
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          var r = (await Navigator.of(context)
+          var result = (await Navigator.of(context)
               .pushNamed(AddSubjectsPage.routeName));
-          var result = (r == null) ? [] : r as List<dynamic>;
-          // print("result is : $result");
-          if (result.isNotEmpty) {
-            var newSubject = SemSubject(
-              sub: result[0] as Subject,
-              mark: result[1],
-            );
+          // debugPrint("result is : $result");
+          if (result != null) {
+            var newSubject = result as SemSubject;
             if (!semSubjects.keys.contains(currSem)) {
               semSubjects[currSem] = [];
             }
-            setState(() {
-              semSubjects[currSem]!.add(newSubject);
-            });
+            setState(
+              () {
+                semSubjects[currSem]!.add(newSubject);
+              },
+            );
             // ignore: use_build_context_synchronously
-            context
-                .read<CalculateCgpaBloc>()
-                .add(CalculateGpa(subjects: semSubjects[currSem]!));
+            context.read<CalculateCgpaBloc>().add(
+                  CalculateGpa(
+                    subjects: semSubjects[currSem]!,
+                  ),
+                );
           }
         },
         child: const Icon(Icons.add),

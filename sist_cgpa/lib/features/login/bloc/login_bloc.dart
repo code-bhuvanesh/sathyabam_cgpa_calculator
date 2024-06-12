@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:http/http.dart' as http;
 
@@ -41,8 +42,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       }
     }
 
-    print("regno : $regno");
-    print("password : $password");
+    debugPrint("regno : $regno");
+    debugPrint("password : $password");
 
     var client = http.Client();
     var body = {
@@ -59,7 +60,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         var startyear = batch.substring(0, batch.indexOf("-"));
         var endyear = batch.substring(batch.indexOf("-") + 1);
 
-        // print(token);
+        // debugPrint(token);
         await secureStorage.writeSecureData(regnoKey, regno);
         await secureStorage.writeSecureData(dobKey, dob);
         await secureStorage.writeSecureData(erpPasswordKey, password);
@@ -68,7 +69,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         await secureStorage.writeSecureData(endYearKey, endyear);
 
         emit(LoginSucess());
-        // print(await secureStorage.readSecureData(authTokenKey));
+        // debugPrint(await secureStorage.readSecureData(authTokenKey));
       } else {
         if (!event.useSaved) {
           emit(LoginFailed());
