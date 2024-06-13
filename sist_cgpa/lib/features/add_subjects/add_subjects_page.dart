@@ -18,6 +18,7 @@ class AddSubjectsPage extends StatefulWidget {
 class _AddSubjectsPageState extends State<AddSubjectsPage> {
   var addTextController = TextEditingController();
   List<Subject> subjectsList = [];
+  bool showProgressBar = true;
 
   @override
   void initState() {
@@ -55,55 +56,72 @@ class _AddSubjectsPageState extends State<AddSubjectsPage> {
         elevation: 0,
         centerTitle: true,
       ),
-      body: SafeArea(
-        child: BlocListener<AddSubjectBloc, AddSubjectState>(
-          listener: (context, state) {
-            if (state is SearchResultState) {
-              setState(() {
-                subjectsList = state.subjectsList;
-              });
-            }
-          },
-          child: Container(
-            color: backgroundColor,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  color: _containerColor,
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextField(
-                    controller: addTextController,
-                    onChanged: (s) => context.read<AddSubjectBloc>().add(
-                          SearchSubjectEvent(searchText: s),
+      body: Stack(
+        children: [
+          SafeArea(
+            child: BlocListener<AddSubjectBloc, AddSubjectState>(
+              listener: (context, state) {
+                if (state is SearchResultState) {
+                  setState(() {
+                    showProgressBar = false;
+                    subjectsList = state.subjectsList;
+                  });
+                }
+              },
+              child: Container(
+                color: backgroundColor,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      color: _containerColor,
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextField(
+                        controller: addTextController,
+                        onChanged: (s) => context.read<AddSubjectBloc>().add(
+                              SearchSubjectEvent(searchText: s),
+                            ),
+                        decoration: InputDecoration(
+                          hintText: "Search by Subject name or subject code",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
                         ),
-                    decoration: InputDecoration(
-                      hintText: "Search by Subject name or subject code",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
                       ),
                     ),
-                  ),
+                    Expanded(
+                      child: ListView.builder(
+                        padding: const EdgeInsets.all(8.0),
+                        controller: _scrollController,
+                        itemBuilder: (_, index) {
+                          if (index == 0) {
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 8.0),
+                              child: addCustomSubjectButtton(context),
+                            );
+                          }
+                          return AddSubjectTile(
+                            subject: subjectsList[index],
+                          );
+                        },
+                        itemCount: subjectsList.length + 1,
+                      ),
+                    ),
+                  ],
                 ),
-                Expanded(
-                  child: ListView.builder(
-                    padding: const EdgeInsets.all(8.0),
-                    controller: _scrollController,
-                    itemBuilder: (_, index) {
-                      if (index == 0) {
-                        return addCustomSubjectButtton(context);
-                      }
-                      return AddSubjectTile(
-                        subject: subjectsList[index],
-                      );
-                    },
-                    itemCount: subjectsList.length + 1,
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
-        ),
+          if (showProgressBar)
+            Container(
+              height: double.infinity,
+              width: double.infinity,
+              color: const Color.fromARGB(78, 0, 0, 0),
+              child: const Center(
+                child: CircularProgressIndicator(),
+              ),
+            ),
+        ],
       ),
     );
   }
@@ -283,7 +301,8 @@ class _AddSubjectTileState extends State<AddSubjectTile> {
         }
       },
       child: Card(
-        color: Theme.of(context).secondaryHeaderColor,
+        elevation: ,
+        color: Colors.white,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(

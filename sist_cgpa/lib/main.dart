@@ -7,6 +7,7 @@ import 'package:sist_cgpa/features/login/bloc/login_bloc.dart';
 import 'package:sist_cgpa/features/settings/settings_page.dart';
 import 'package:sist_cgpa/utilites/sqlite_db.dart';
 import 'package:sist_cgpa/utilites/theme.dart';
+import 'package:flutter_displaymode/flutter_displaymode.dart';
 
 import '/animations/page_transition_animation.dart';
 import 'features/calculate_cgpa/bloc/calculate_cgpa_bloc.dart';
@@ -20,6 +21,10 @@ import 'package:flutter/material.dart';
 void main() {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
 
   //initialize DB
   SqliteDB().initializeDatabase();
@@ -50,9 +55,23 @@ class MyApp extends StatelessWidget {
   };
   static const MaterialColor blackColor =
       MaterialColor(0xFF000000, blackSwatch);
+  Future<void> changeRefreshrate() async {
+    try {
+      var modes = await FlutterDisplayMode.supported;
+      // print("display modes");
+      // print(modes);
+      // print("active dispaly mode");
+      await FlutterDisplayMode.setPreferredMode(modes[1]);
+      // print("new active dispaly mode");
+      await FlutterDisplayMode.active;
+    } on PlatformException catch (e) {
+      debugPrint(e.toString());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    changeRefreshrate();
     return MaterialApp(
       title: 'sist cgpa',
       theme: ThemeData(
@@ -68,6 +87,9 @@ class MyApp extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(200),
           ),
+        ),
+        progressIndicatorTheme: const ProgressIndicatorThemeData(
+          color: Colors.black,
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
             style: ButtonStyle(

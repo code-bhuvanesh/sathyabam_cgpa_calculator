@@ -148,24 +148,29 @@ class _CalculateGpaPageState extends State<CalculateGpaPage>
                       color: Theme.of(context).primaryColor,
                       elevation: 5,
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
+                        borderRadius: BorderRadius.circular(100),
+                      ),
                       child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 6, horizontal: 10),
-                          child: Text(
-                            "Semmester $currSem",
-                            style: const TextStyle(
-                              fontSize: 20,
-                              color: Colors.white,
-                            ),
-                          )),
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 10,
+                          horizontal: 20,
+                        ),
+                        child: Text(
+                          "semester $currSem",
+                          style: const TextStyle(
+                            fontSize: 20,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
                     ),
                     arrowButton(isLeftButton: false),
                   ],
                 ),
               ),
               Expanded(
-                child: (semSubjects.keys.contains(currSem))
+                child: (semSubjects.keys.contains(currSem) &&
+                        semSubjects[currSem]!.isNotEmpty)
                     ? ListView.builder(
                         controller: _scrollController,
                         itemBuilder: (_, index) {
@@ -294,7 +299,7 @@ class _CalculateGpaPageState extends State<CalculateGpaPage>
           }
           if (isLeftButton && currSem > 1) {
             currSem--;
-          } else if (currSem < totalSem) {
+          } else if (!isLeftButton && currSem < totalSem) {
             currSem++;
           } else if (currSem == totalSem) {
             totalSem++;

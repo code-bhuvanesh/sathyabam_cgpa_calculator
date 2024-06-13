@@ -49,7 +49,7 @@ class _SubjectItemState extends State<SubjectItem> {
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     return Card(
-      // color: Colors.white,
+      color: Colors.white,
       margin: const EdgeInsets.symmetric(
         vertical: 5,
         horizontal: 10,

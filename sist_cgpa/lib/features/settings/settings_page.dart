@@ -40,17 +40,28 @@ class _SetttingsPageState extends State<SetttingsPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Text(
-              "Credits\nDevloped By Bhuvanesh (2021-2025) Batch",
-            ),
-            const SizedBox(
-              height: 50,
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.35,
             ),
             ElevatedButton(
               onPressed: logout,
               child: const Text(
                 "logout",
               ),
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.25,
+            ),
+            const Text(
+              "Credits\nDevloped By\nBhuvanesh\n(2021-2025) Batch",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(
+              height: 50,
             ),
           ],
         ),

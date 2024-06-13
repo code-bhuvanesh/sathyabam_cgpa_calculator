@@ -26,6 +26,7 @@ class _LoginPageState extends State<LoginPage> {
   var regnoController = TextEditingController();
   var dobController = TextEditingController(text: "26/11/2003");
   var passwordController = TextEditingController();
+  bool showProgressBar = false;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -48,124 +49,148 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       body: Container(
         color: backgroundColor,
-        child: SafeArea(
-          child: BlocListener<LoginBloc, LoginState>(
-            listener: (context, state) {
-              if (state is LoginSucess) {
-                if (mounted) {
-                  Navigator.of(context).pushNamedAndRemoveUntil(
-                    CalculateGpaPage.routeName,
-                    (Route<dynamic> route) => false,
-                  );
-                }
-              } else if (state is LoginFailed) {
-                if (mounted) {
-                  showTopSnackBar(
-                    Overlay.of(context),
-                    const CustomSnackBar.error(
-                      message: "Invalid register number or password",
+        child: Stack(
+          children: [
+            SafeArea(
+              child: BlocListener<LoginBloc, LoginState>(
+                listener: (context, state) {
+                  if (state is LoginSucess) {
+                    if (mounted) {
+                      setState(() {
+                        showProgressBar = false;
+                      });
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                        CalculateGpaPage.routeName,
+                        (Route<dynamic> route) => false,
+                      );
+                    }
+                  } else if (state is LoginFailed) {
+                    if (mounted) {
+                      setState(() {
+                        showProgressBar = false;
+                      });
+                      showTopSnackBar(
+                        Overlay.of(context),
+                        const CustomSnackBar.error(
+                          message: "Invalid register number or password",
+                        ),
+                      );
+                    }
+                  }
+                },
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      flex: 2,
+                      child: logo(),
                     ),
-                  );
-                }
-              }
-            },
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: logo(),
-                ),
-                Expanded(
-                  flex: 3,
-                  child: SingleChildScrollView(
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                        children: [
-                          const Align(
-                            alignment: Alignment.centerLeft,
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 30.0,
-                                vertical: 10.0,
-                              ),
-                              child: Text(
-                                "Login for easy access",
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  // color: Color.fromARGB(255, 3, 8, 87),
+                    Expanded(
+                      flex: 3,
+                      child: SingleChildScrollView(
+                        child: Form(
+                          key: _formKey,
+                          child: Column(
+                            children: [
+                              const Align(
+                                alignment: Alignment.centerLeft,
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 30.0,
+                                    vertical: 10.0,
+                                  ),
+                                  child: Text(
+                                    "Login for easy access",
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      // color: Color.fromARGB(255, 3, 8, 87),
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ),
-                          customTextField(
-                            hintText: "regiester number",
-                            controller: regnoController,
-                            validator: isvalidRegno,
-                          ),
-                          // customTextField(
-                          //     hintText: "date of birth",
-                          //     controller: dobController,
-                          //     validator: isValidDOBFormat),
-                          customTextField(
-                            hintText: "erp password",
-                            controller: passwordController,
-                            isPassword: true,
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          ElevatedButton(
-                            onPressed: () {
-                              if (_formKey.currentState!.validate()) {
-                                context.read<LoginBloc>().add(
-                                      OnLogin(
-                                        useSaved: false,
-                                        regno: regnoController.text,
-                                        dob: dobController.text,
-                                        erpPassword: passwordController.text,
-                                      ),
-                                    );
-                              }
-                            },
-                            child: const Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 30),
-                              child: Text("Login"),
-                            ),
-                          ),
-                          TextButton(
-                            onPressed: () => Navigator.of(context)
-                                .popAndPushNamed(CalculateGpaPage.routeName),
-                            child: const Text(
-                              "skip",
-                              style: TextStyle(
-                                color: Color.fromARGB(255, 114, 114, 114),
-                                fontSize: 18,
+                              customTextField(
+                                hintText: "regiester number",
+                                controller: regnoController,
+                                validator: isvalidRegno,
                               ),
-                            ),
-                          ),
+                              // customTextField(
+                              //     hintText: "date of birth",
+                              //     controller: dobController,
+                              //     validator: isValidDOBFormat),
+                              customTextField(
+                                hintText: "erp password",
+                                controller: passwordController,
+                                isPassword: true,
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              ElevatedButton(
+                                onPressed: () {
+                                  if (_formKey.currentState!.validate()) {
+                                    setState(() {
+                                      showProgressBar = true;
+                                    });
+                                    context.read<LoginBloc>().add(
+                                          OnLogin(
+                                            useSaved: false,
+                                            regno: regnoController.text,
+                                            dob: dobController.text,
+                                            erpPassword:
+                                                passwordController.text,
+                                          ),
+                                        );
+                                  }
+                                },
+                                child: const Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 30),
+                                  child: Text("Login"),
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () => Navigator.of(context)
+                                    .popAndPushNamed(
+                                        CalculateGpaPage.routeName),
+                                child: const Text(
+                                  "skip",
+                                  style: TextStyle(
+                                    color: Color.fromARGB(255, 114, 114, 114),
+                                    fontSize: 18,
+                                  ),
+                                ),
+                              ),
 
-                          const Padding(
-                            padding: EdgeInsets.all(50),
-                            child: Text(
-                              "Made by Bhuvanesh",
-                              style: TextStyle(
-                                // color: Colors.white,
-                                fontSize: 20,
+                              const Padding(
+                                padding: EdgeInsets.all(50),
+                                child: Text(
+                                  "Made by Bhuvanesh",
+                                  style: TextStyle(
+                                    // color: Colors.white,
+                                    fontSize: 20,
+                                  ),
+                                ),
                               ),
-                            ),
+                            ],
                           ),
-                        ],
+                        ),
                       ),
-                    ),
-                  ),
-                )
-              ],
+                    )
+                  ],
+                ),
+              ),
             ),
-          ),
+            if (showProgressBar)
+              Container(
+                height: double.infinity,
+                width: double.infinity,
+                color: const Color.fromARGB(78, 0, 0, 0),
+                child: const Center(
+                  child: CircularProgressIndicator(),
+                ),
+              ),
+          ],
         ),
       ),
     );
