@@ -301,7 +301,7 @@ class _AddSubjectTileState extends State<AddSubjectTile> {
         }
       },
       child: Card(
-        elevation: ,
+        elevation: 2,
         color: Colors.white,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
