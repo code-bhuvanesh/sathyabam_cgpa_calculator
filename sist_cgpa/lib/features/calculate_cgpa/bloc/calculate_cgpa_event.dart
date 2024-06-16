@@ -4,7 +4,6 @@ part of 'calculate_cgpa_bloc.dart';
 sealed class CalculateCgpaEvent {}
 
 class LoadSubjects extends CalculateCgpaEvent {
-  LoadSubjects();
 }
 
 class CalculateGpa extends CalculateCgpaEvent {

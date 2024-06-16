@@ -1,22 +1,21 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:sist_cgpa/features/add_subjects/add_subjects_page.dart';
-import 'package:sist_cgpa/features/add_subjects/bloc/add_page_bloc.dart';
-import 'package:sist_cgpa/features/login/bloc/login_bloc.dart';
-import 'package:sist_cgpa/features/settings/settings_page.dart';
-import 'package:sist_cgpa/utilites/sqlite_db.dart';
-import 'package:sist_cgpa/utilites/theme.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
 
-import '/animations/page_transition_animation.dart';
+import 'features/add_subjects/add_subjects_page.dart';
+import 'features/add_subjects/bloc/add_page_bloc.dart';
+import 'features/login/bloc/login_bloc.dart';
+import 'features/logout/logout_page.dart';
 import 'features/calculate_cgpa/bloc/calculate_cgpa_bloc.dart';
-import 'features/choose_branch/choose_branch_page.dart';
 import 'features/calculate_cgpa/calculate_cgpa_page.dart';
-import 'features/choose_course/choose_course_page.dart';
 import 'features/login/login_page.dart';
 import 'features/show_cgpa/show_cgpa_page.dart';
-import 'package:flutter/material.dart';
+import 'utilites/sqlite_db.dart';
+import 'utilites/theme.dart';
+import '/animations/page_transition_animation.dart';
 
 void main() {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -35,6 +34,9 @@ void main() {
       statusBarIconBrightness: Brightness.dark, // Set your desired color here
     ),
   );
+
+  MobileAds.instance.initialize();
+
   runApp(const MyApp());
 }
 
@@ -127,16 +129,6 @@ class MyApp extends StatelessWidget {
                 child: const LoginPage(),
               ),
             );
-          case ChooseBranch.routeName:
-            return PageTransionAnim(
-              builder: (context) => const ChooseBranch(),
-            );
-          case ChooseCourse.routeName:
-            return PageTransionAnim(
-              builder: (context) => ChooseCourse(
-                branch: settings.arguments as String,
-              ),
-            );
           case AddSubjectsPage.routeName:
             return PageTransionAnim(
               builder: (context) => BlocProvider(
@@ -157,9 +149,9 @@ class MyApp extends StatelessWidget {
                 cgpa: settings.arguments as double,
               ),
             );
-          case SetttingsPage.routeName:
+          case LogoutPage.routeName:
             return PageTransionAnim(
-              builder: (context) => const SetttingsPage(),
+              builder: (context) => const LogoutPage(),
             );
           default:
             return PageTransionAnim(

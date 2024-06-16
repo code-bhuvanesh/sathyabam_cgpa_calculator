@@ -26,7 +26,7 @@ class _LoginPageState extends State<LoginPage> {
   var regnoController = TextEditingController();
   var dobController = TextEditingController(text: "26/11/2003");
   var passwordController = TextEditingController();
-  bool showProgressBar = false;
+  bool _isLoading = true;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -57,7 +57,7 @@ class _LoginPageState extends State<LoginPage> {
                   if (state is LoginSucess) {
                     if (mounted) {
                       setState(() {
-                        showProgressBar = false;
+                        _isLoading = false;
                       });
                       Navigator.of(context).pushNamedAndRemoveUntil(
                         CalculateGpaPage.routeName,
@@ -67,7 +67,7 @@ class _LoginPageState extends State<LoginPage> {
                   } else if (state is LoginFailed) {
                     if (mounted) {
                       setState(() {
-                        showProgressBar = false;
+                        _isLoading = false;
                       });
                       showTopSnackBar(
                         Overlay.of(context),
@@ -76,6 +76,10 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       );
                     }
+                  } else if (state is NoLoginCredentials) {
+                    setState(() {
+                      _isLoading = false;
+                    });
                   }
                 },
                 child: Column(
@@ -111,18 +115,20 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                               ),
                               customTextField(
-                                hintText: "regiester number",
+                                hintText: "register number",
                                 controller: regnoController,
                                 validator: isvalidRegno,
+                                inputType: TextInputType.number,
                               ),
                               // customTextField(
                               //     hintText: "date of birth",
                               //     controller: dobController,
                               //     validator: isValidDOBFormat),
                               customTextField(
-                                hintText: "erp password",
+                                hintText: "ERP password",
                                 controller: passwordController,
                                 isPassword: true,
+                                inputType: TextInputType.text,
                               ),
                               const SizedBox(
                                 height: 10,
@@ -131,7 +137,7 @@ class _LoginPageState extends State<LoginPage> {
                                 onPressed: () {
                                   if (_formKey.currentState!.validate()) {
                                     setState(() {
-                                      showProgressBar = true;
+                                      _isLoading = true;
                                     });
                                     context.read<LoginBloc>().add(
                                           OnLogin(
@@ -149,15 +155,21 @@ class _LoginPageState extends State<LoginPage> {
                                   child: Text("Login"),
                                 ),
                               ),
-                              TextButton(
-                                onPressed: () => Navigator.of(context)
-                                    .popAndPushNamed(
-                                        CalculateGpaPage.routeName),
-                                child: const Text(
-                                  "skip",
-                                  style: TextStyle(
-                                    color: Color.fromARGB(255, 114, 114, 114),
-                                    fontSize: 18,
+
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                  top: 15.0,
+                                ),
+                                child: TextButton(
+                                  onPressed: () => Navigator.of(context)
+                                      .popAndPushNamed(
+                                          CalculateGpaPage.routeName),
+                                  child: const Text(
+                                    "skip",
+                                    style: TextStyle(
+                                      color: Color.fromARGB(255, 114, 114, 114),
+                                      fontSize: 18,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -181,7 +193,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             ),
-            if (showProgressBar)
+            if (_isLoading)
               Container(
                 height: double.infinity,
                 width: double.infinity,
@@ -208,7 +220,7 @@ class _LoginPageState extends State<LoginPage> {
             // height: 150,
             // width: 150,
             child: Lottie.asset(
-              "assets/hat_anim.json",
+              "assets/anim/hat_anim.json",
               height: MediaQuery.of(context).size.height * 0.13,
             ),
           ),
@@ -228,22 +240,39 @@ class _LoginPageState extends State<LoginPage> {
 
   String? noError(String? s) => null;
 
-  Widget customTextField(
-      {required String hintText,
-      required TextEditingController controller,
-      String? Function(String?)? validator,
-      bool isPassword = false}) {
+  var isPasswordVisible = true;
+
+  Widget customTextField({
+    required String hintText,
+    required TextEditingController controller,
+    String? Function(String?)? validator,
+    bool isPassword = false,
+    required TextInputType inputType,
+  }) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: TextFormField(
         controller: controller,
         validator: validator ?? noError,
-        obscureText: isPassword,
+        obscureText: isPasswordVisible && isPassword,
+        keyboardType: inputType,
         decoration: InputDecoration(
           focusColor: Colors.white,
           fillColor: Colors.white,
-          hintText: hintText,
+          labelText: hintText,
           filled: true,
+          suffixIcon: isPassword
+              ? IconButton(
+                  icon: Icon(
+                    isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      isPasswordVisible = !isPasswordVisible;
+                    });
+                  },
+                )
+              : null,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(20),
           ),

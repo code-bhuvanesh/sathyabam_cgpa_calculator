@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:sist_cgpa/models/sem_subject.dart';
 import 'package:sist_cgpa/models/subject.dart';
+import 'package:sist_cgpa/utilites/adhelper.dart';
 import '../../utilites/theme.dart';
 import './bloc/add_page_bloc.dart';
 import 'add_custom_subject.dart';
@@ -26,6 +28,13 @@ class _AddSubjectsPageState extends State<AddSubjectsPage> {
     _scrollController = ScrollController();
     _scrollController.addListener(_onScroll);
     context.read<AddSubjectBloc>().add(SearchSubjectEvent(searchText: ""));
+    loadAd();
+  }
+
+  @override
+  void dispose() {
+    if (_bannerAd != null) _bannerAd!.dispose();
+    super.dispose();
   }
 
   late ScrollController _scrollController;
@@ -40,6 +49,43 @@ class _AddSubjectsPageState extends State<AddSubjectsPage> {
         _containerColor = backgroundColor;
       }
     });
+  }
+
+  BannerAd? _bannerAd;
+  bool _isADLoaded = false;
+
+  /// Loads a banner ad.
+  void loadAd() {
+    try {
+      _bannerAd = BannerAd(
+        adUnitId: AdHelper.bannerAdUnitId,
+        request: const AdRequest(),
+        size: AdSize.banner,
+        listener: BannerAdListener(
+          // Called when an ad is successfully received.
+          onAdLoaded: (ad) {
+            debugPrint('$ad loaded.');
+            setState(() {
+              _isADLoaded = true;
+            });
+          },
+          // Called when an ad request failed.
+          onAdFailedToLoad: (ad, err) {
+            debugPrint('BannerAd failed to load: $err');
+            // Dispose the ad here to free resources.
+            ad.dispose();
+          },
+          // Called when an ad opens an overlay that covers the screen.
+          onAdOpened: (Ad ad) {},
+          // Called when an ad removes an overlay that covers the screen.
+          onAdClosed: (Ad ad) {},
+          // Called when an impression occurs on the ad.
+          onAdImpression: (Ad ad) {},
+        ),
+      )..load();
+    } on Exception catch (e) {
+      debugPrint(e.toString());
+    }
   }
 
   @override
@@ -100,11 +146,28 @@ class _AddSubjectsPageState extends State<AddSubjectsPage> {
                               child: addCustomSubjectButtton(context),
                             );
                           }
-                          return AddSubjectTile(
-                            subject: subjectsList[index],
-                          );
+                          if (index == 1) {
+                            if (_isADLoaded) {
+                              _bannerAd!.load();
+                              return Align(
+                                alignment: Alignment.bottomCenter,
+                                child: SafeArea(
+                                  child: SizedBox(
+                                    width: _bannerAd!.size.width.toDouble(),
+                                    height: _bannerAd!.size.height.toDouble(),
+                                    child: AdWidget(ad: _bannerAd!),
+                                  ),
+                                ),
+                              );
+                            }
+                            return const SizedBox.shrink();
+                          } else {
+                            return AddSubjectTile(
+                              subject: subjectsList[index - 2],
+                            );
+                          }
                         },
-                        itemCount: subjectsList.length + 1,
+                        itemCount: subjectsList.length + 2,
                       ),
                     ),
                   ],

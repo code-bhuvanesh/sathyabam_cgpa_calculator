@@ -51,7 +51,7 @@ class SqliteDB {
 
       // Copy from asset
       ByteData data =
-          await rootBundle.load(url.join("assets", "courses.sqlite"));
+          await rootBundle.load(url.join("assets/database", "courses.sqlite"));
       List<int> bytes =
           data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
 
@@ -123,51 +123,52 @@ class SqliteDB {
   }
 
   Future<List<Subject>> searchSubject(String searchText) async {
+    searchText = searchText.trim();
     final List<String> keywords =
         searchText.split(" "); // Split query into separate keywords
 
-    String whereClause = 'subcode LIKE ?';
-    List<String> whereArgs = ['${keywords[0]}%'];
+    // String whereClause = 'subcode LIKE ?';
+    // List<String> whereArgs = ['${keywords[0]}%'];
 
-    List<Map<String, dynamic>> results = await _db.query(
-      'subjects',
-      where: whereClause,
-      whereArgs: whereArgs,
-    );
-    whereArgs.clear();
-    //this is used when online seearch both where subject code and name is given
-    whereClause = 'coursetitle LIKE ?';
-    // var subjectData = "";
-    // keywords.sublist(1).forEach((element) {
-    //   subjectData += "$element ";
-    // });
-    whereArgs.add('%${keywords.sublist(1).join(" ")}%');
+    // whereClause += ' and (coursetitle LIKE ?';
+    // whereArgs.add('$searchText%');
 
-    whereClause += ' OR coursetitle LIKE ?';
-    whereArgs.add('%$searchText%');
+    // // var subjectData = "";
+    // // keywords.sublist(1).forEach((element) {
+    // //   subjectData += "$element ";
+    // // });
+
+    // if (keywords.length > 1) {
+    //   //this is used when online search both where subject code and name is given
+    //   whereClause += ' or coursetitle LIKE ?)';
+    //   whereArgs.add('%${keywords.sublist(1).join(" ")}%');
+    // }
 
     // for (int i = 0; i < keywords.length; i++) {
     //   whereClause += ' OR coursetitle LIKE ?';
     //   whereArgs.add('%${keywords[i]}%');
     // }
 
-    results += await _db.query(
-      'subjects',
-      where: whereClause,
-      whereArgs: whereArgs,
-    );
-    // var sub = (await _db.rawQuery(
-    //         "SELECT * from subjects where subcode like ?", ["%$searchText%"]))
-    //     .map((e) => Subject.fromJson(e.cast<String, dynamic>()))
-    //     .toList();
-    debugPrint(whereClause);
-    debugPrint(whereArgs.toString());
+    // List<Map<String, dynamic>> results = await _db.query(
+    //   'subjects',
+    //   where: whereClause,
+    //   whereArgs: whereArgs,
+    // );
+    List<Map<String, dynamic>> results = (await _db.rawQuery(
+        // "SELECT * from subjects where subcode like ? or coursetitle LIKE ? or coursetitle LIKE ?",
+        "SELECT * from subjects where subcode like ? or coursetitle LIKE ?",
+        [
+          '%${keywords[0]}%',
+          '$searchText%',
+          // '%${keywords.sublist(1).join(" ")}%',
+        ]));
+    print(keywords[0]);
     var sub = results
         .map((e) => Subject.fromJson(e.cast<String, dynamic>()))
         .toList();
     //
     // return Subject.fromJson(sub);
-    // debugPrint("searched subjects len ${sub.length} $sub ");
+    debugPrint("searched subjects len ${sub.length} $sub ");
     return sub;
   }
 }

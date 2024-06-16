@@ -1,11 +1,13 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:sist_cgpa/features/add_subjects/add_subjects_page.dart';
 import 'package:sist_cgpa/features/calculate_cgpa/bloc/calculate_cgpa_bloc.dart';
-import 'package:sist_cgpa/features/settings/settings_page.dart';
+import 'package:sist_cgpa/features/logout/logout_page.dart';
 import 'package:sist_cgpa/features/show_cgpa/show_cgpa_page.dart';
 import 'package:sist_cgpa/models/sem_subject.dart';
 import 'package:sist_cgpa/utilites/theme.dart';
 
+import '../../utilites/adhelper.dart';
 import '../../widget/subject_wiget.dart';
 import '/models/course.dart';
 import '/models/current_sem_cgpa.dart';
@@ -48,8 +50,69 @@ class _CalculateGpaPageState extends State<CalculateGpaPage>
     super.initState();
     _scrollController = ScrollController();
     _scrollController.addListener(_onScroll);
-
+    loadFullScreenAd();
+    loadBannerAd();
     context.read<CalculateCgpaBloc>().add(LoadSubjects());
+    WidgetsBinding.instance.addPostFrameCallback((_) => showEnsureDialog());
+  }
+
+  @override
+  void dispose() {
+    if (_bannerAd != null) _bannerAd!.dispose();
+    if (_interstitialAd != null) _interstitialAd!.dispose();
+    super.dispose();
+  }
+
+  BannerAd? _bannerAd;
+  bool _isADLoaded = false;
+
+  /// Loads a banner ad.
+  void loadBannerAd() {
+    try {
+      _bannerAd = BannerAd(
+        adUnitId: AdHelper.bannerAdUnitId,
+        request: const AdRequest(),
+        size: AdSize.banner,
+        listener: BannerAdListener(
+          onAdLoaded: (ad) {
+            debugPrint('$ad loaded.');
+            setState(() {
+              _isADLoaded = true;
+            });
+          },
+          // Called when an ad request failed.
+          onAdFailedToLoad: (ad, err) {
+            debugPrint('BannerAd failed to load: $err');
+            // Dispose the ad here to free resources.
+            ad.dispose();
+          },
+        ),
+      )..load();
+    } on Exception catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  InterstitialAd? _interstitialAd;
+  void loadFullScreenAd() {
+    try {
+      InterstitialAd.load(
+        adUnitId: AdHelper.fullscreenAdUnitId,
+        request: const AdRequest(),
+        adLoadCallback: InterstitialAdLoadCallback(
+          // Called when an ad is successfully received.
+          onAdLoaded: (ad) {
+            _interstitialAd = ad;
+          },
+          // Called when an ad request failed.
+          onAdFailedToLoad: (LoadAdError error) {
+            debugPrint('InterstitialAd failed to load: $error');
+          },
+        ),
+      );
+    } on Exception catch (e) {
+      debugPrint(e.toString());
+    }
   }
 
   late ScrollController _scrollController;
@@ -66,6 +129,41 @@ class _CalculateGpaPageState extends State<CalculateGpaPage>
     });
   }
 
+  void showEnsureDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        child: Container(
+          width: 300,
+          padding: const EdgeInsets.symmetric(
+            horizontal: 13,
+            vertical: 20,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Center(
+                child: Text(
+                  "Ensure all the subjects are listed in all the semester to calculate CGPA properly.\nThere may be some missing subjects",
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              ElevatedButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text("ok"),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,7 +177,7 @@ class _CalculateGpaPageState extends State<CalculateGpaPage>
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.of(context).pushNamed(SetttingsPage.routeName);
+              Navigator.of(context).pushNamed(LogoutPage.routeName);
             },
             icon: const Icon(
               Icons.settings,
@@ -105,6 +203,14 @@ class _CalculateGpaPageState extends State<CalculateGpaPage>
               semSubjects = state.semSubjects;
               totalSem = totalSem;
             });
+
+            if (semSubjects.containsKey(currSem)) {
+              context.read<CalculateCgpaBloc>().add(
+                    CalculateGpa(
+                      subjects: semSubjects[currSem]!,
+                    ),
+                  );
+            }
           } else if (state is GpaResult) {
             setState(() {
               curGpa = state.gpa;
@@ -112,10 +218,16 @@ class _CalculateGpaPageState extends State<CalculateGpaPage>
             await SecureStorage().saveSemSubjects(
                 semSubjects); //when ever a new subject is added
           } else if (state is CgpaResult) {
-            Navigator.of(context).pushNamed(
-              ShowCgpa.routeName,
-              arguments: state.cgpa,
-            );
+            loadFullScreenAd();
+            if (_interstitialAd != null) {
+              await _interstitialAd!.show();
+            }
+            if (mounted) {
+              Navigator.of(context).pushNamed(
+                ShowCgpa.routeName,
+                arguments: state.cgpa,
+              );
+            }
           }
         },
         child: Container(
@@ -174,23 +286,41 @@ class _CalculateGpaPageState extends State<CalculateGpaPage>
                     ? ListView.builder(
                         controller: _scrollController,
                         itemBuilder: (_, index) {
-                          var semSubject = semSubjects[currSem]![index];
-                          return SubjectItem(
-                            subject: semSubject.sub,
-                            tec: semSubject.textController,
-                            onDelete: () {
-                              setState(() {
-                                semSubjects[currSem]!.removeAt(index);
-                              });
-                              context.read<CalculateCgpaBloc>().add(
-                                    CalculateGpa(
-                                      subjects: semSubjects[currSem]!,
-                                    ),
-                                  );
-                            },
-                          );
+                          if (index == 0) {
+                            if (_isADLoaded) {
+                              // _bannerAd!.load();
+                              return Align(
+                                alignment: Alignment.bottomCenter,
+                                child: SafeArea(
+                                  child: SizedBox(
+                                    width: _bannerAd!.size.width.toDouble(),
+                                    height: _bannerAd!.size.height.toDouble(),
+                                    child: AdWidget(ad: _bannerAd!),
+                                  ),
+                                ),
+                              );
+                            }
+                            return const SizedBox.shrink();
+                          } else {
+                            var semSubject = semSubjects[currSem]![index - 1];
+
+                            return SubjectItem(
+                              subject: semSubject.sub,
+                              tec: semSubject.textController,
+                              onDelete: () {
+                                setState(() {
+                                  semSubjects[currSem]!.removeAt(index);
+                                });
+                                context.read<CalculateCgpaBloc>().add(
+                                      CalculateGpa(
+                                        subjects: semSubjects[currSem]!,
+                                      ),
+                                    );
+                              },
+                            );
+                          }
                         },
-                        itemCount: semSubjects[currSem]!.length,
+                        itemCount: semSubjects[currSem]!.length + 1,
                       )
                     : const Center(
                         child: Text(
@@ -290,6 +420,7 @@ class _CalculateGpaPageState extends State<CalculateGpaPage>
           size: 30,
         ),
         onPressed: () {
+          loadBannerAd();
           if (_scrollController.hasClients) {
             _scrollController.animateTo(
               0,

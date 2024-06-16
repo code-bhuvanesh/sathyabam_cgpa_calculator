@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:lottie/lottie.dart';
+import 'package:sist_cgpa/utilites/adhelper.dart';
 
 class ShowCgpa extends StatefulWidget {
   static const String routeName = "/showCgpa";
@@ -10,57 +12,50 @@ class ShowCgpa extends StatefulWidget {
   State<ShowCgpa> createState() => _ShowCgpaState();
 }
 
-class _ShowCgpaState extends State<ShowCgpa>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _controller;
-  late final int _stopFrame; // Frame to stop the animation
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      vsync: this,
-    );
-
-    // You can set the frame to stop here
-    // _stopFrame = 900; // Replace with the desired frame
-
-    // _controller.addListener(() {
-    //   // Calculate the current frame
-    //   final frame =
-    //       (_controller.value * _controller.duration!.inMilliseconds / 1000) *
-    //           60; // Assuming 60 fps
-    //   if (frame >= _stopFrame) {
-    //     _controller.stop();
-    //   }
-    // });
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
+class _ShowCgpaState extends State<ShowCgpa> {
+ 
   @override
   Widget build(BuildContext context) {
     // var transformedCgpa = (cgpa * 100).toInt();
     return Scaffold(
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
+            const SizedBox(
+              height: 20,
+            ),
             Lottie.asset(
-              'assets/lottie_anim1.json',
+              'assets/anim/lottie_anim1.json',
               // controller: _controller,
             ),
             const SizedBox(
               height: 100,
             ),
-            Text(
-              " Your CGPA is ${widget.cgpa.toStringAsFixed(2)}",
-              style: const TextStyle(fontSize: 25),
+            Card(
+              margin: const EdgeInsets.symmetric(
+                horizontal: 20,
+              ),
+              color: Colors.black,
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(15.0),
+                alignment: Alignment.center,
+                child: Text(
+                  " Your CGPA is ${widget.cgpa.toStringAsFixed(2)}",
+                  style: const TextStyle(
+                    fontSize: 25,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
             ),
+            ElevatedButton(
+              onPressed: () {},
+              child: const Text(
+                "Give your Feedback",
+              ),
+            )
           ],
         ),
       ),

@@ -31,71 +31,20 @@ class CalculateCgpaBloc extends Bloc<CalculateCgpaEvent, CalculateCgpaState> {
     on<LoadSubjects>(loadSubjects);
   }
 
-  // void getUserData() async {
-  //   var authToken = "";
-  //   var regno = "";
-  //   var startYear = 0;
-  //   var endYear = 0;
-  //   try {
-  //     authToken = await secureStorage.readSecureData(authTokenKey);
-  //     regno = await secureStorage.readSecureData(regnoKey);
-  //     startYear = int.parse(await secureStorage.readSecureData(startYearKey));
-  //     endYear = int.parse(await secureStorage.readSecureData(endYearKey));
-  //   } catch (e) {
-  //     debugPrint(e);
-  //     return;
-  //   }
-
-  //   // debugPrint(
-  //   //     "${startYear + (sem ~/ 2).ceil() - 1}-${startYear + (sem ~/ 2).ceil()}");
-
-  //   var url =
-  //       "https://erp.sathyabama.ac.in/erp/api/v1.0/ResultMark/studentResult";
-  //   var client = http.Client();
-  //   var headers = {
-  //     "Authorization": "Bearer ${await getAuthToken()}",
-  //   };
-
-  //   var year = startYear + (selectedSem / 2).ceil();
-  //   var body = {
-  //     "RegisterNumber": regno,
-  //     "AcademicMonthId": "${selectedSem % 2 == 0 ? 1 : 2}",
-  //     "AcademicYear": "${year - 1}-$year",
-  //     "Semester": "$selectedSem"
-  //   };
-  //   debugPrint("body:  $body");
-  //   var response =
-  //       await client.post(Uri.parse(url), headers: headers, body: body);
-  //   var data = jsonDecode(response.body)["responseData"]["SemResult"];
-  //   // debugPrint(data);
-  //   for (var i in data) {
-  //     debugPrint("subject code : ${i["SubjectCode"]}");
-  //     debugPrint("Subject Name : ${i["SubjectName"]}");
-  //     var semsub = semSubjects[currSem]!.firstWhere(
-  //       (element) {
-  //         var sub = element.sub;
-  //         debugPrint("**************************************");
-  //         debugPrint("${sub.subCode} : ${i["SubjectCode"]}");
-  //         debugPrint("${sub.subName} == ${i["SubjectName"]}");
-
-  //         return sub.subCode == i["SubjectCode"].trim() ||
-  //             sub.subName == i["SubjectName"].trim();
-  //       },
-  //     );
-  //     semsub.texController.text = i["TotalMark"].toString();
-  //   }
-  // }
-
-  // void loadSubs() async {
-
-  //     for (var i = 1; i <= currentCourse.maxsem; i++) {
-  //       allSemGpa.addAll({"sem $i": -1.0});
-  //     }
-  //
-  //   });
-  //   getUserData();
-  //   createDropdownItems();
-  // }
+  int gradePoint(int mark) {
+    if (mark >= 90) {
+      return 10;
+    } else if (mark >= 80) {
+      return 9;
+    } else if (mark >= 70) {
+      return 8;
+    } else if (mark >= 60) {
+      return 7;
+    } else if (mark >= 50) {
+      return 6;
+    }
+    return 0;
+  }
 
   List<double> gpaSubFuntion(List<SemSubject> subjects) {
     var gpa = 0.0;
@@ -199,6 +148,8 @@ class CalculateCgpaBloc extends Bloc<CalculateCgpaEvent, CalculateCgpaState> {
         // debugPrint(data);
         debugPrint("testevent : semseter $curSem");
         for (var i in data) {
+          int? sem = i["Semester"];
+          if (sem == null || sem != curSem) continue;
           if (!semSubjects.keys.contains(curSem)) semSubjects[curSem] = [];
           debugPrint("subject code : ${i["SubjectCode"]}");
           // debugPrint("Subject Name : ${i["SubjectName"]}");

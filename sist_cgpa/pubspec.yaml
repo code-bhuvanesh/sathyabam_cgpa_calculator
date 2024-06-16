@@ -3,7 +3,7 @@ description: "sathyabama CGPA calculator"
 
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
-version: 1.0.0+1
+version: 1.0.0+4
 
 environment:
   sdk: ">=3.2.1 <4.0.0"
@@ -23,6 +23,8 @@ dependencies:
   sqflite: ^2.3.0
   lottie: ^3.1.2
   flutter_displaymode: ^0.6.0
+  google_mobile_ads: ^1.2.0
+  url_launcher: ^6.3.0
 
 dev_dependencies:
   flutter_test:
@@ -34,14 +36,15 @@ dev_dependencies:
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "assets/app_logo.png"
+  image_path: "assets/icons/app_logo.png"
   min_sdk_android: 16 # android min sdk min:16, default 2
 
 flutter_native_splash:
   color: "#ffffff"
   #background_image: "assets/background.png"
-  image: assets/app_logo.png
+  image: assets/app_splash_screen.png
   android_12:
+    image: assets/app_splash_screen.png
     #image: assets/android12splash.png
     color: "#ffffff"
 
@@ -49,15 +52,15 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/course_credits.json
-    - assets/courses.sqlite
-    - assets/lottie_anim1.json
-    - assets/lottie_anim2.json
-    - assets/lottie_anim3.json
-    - assets/hat_anim.json
-    - assets/hat_anim.lottie
+    - assets/database/course_credits.json
+    - assets/database/courses.sqlite
+    - assets/icons/
+    - assets/anim/lottie_anim1.json
+    - assets/anim/lottie_anim2.json
+    - assets/anim/lottie_anim3.json
+    - assets/anim/hat_anim.json
 
   fonts:
     - family: custom_font
       fonts:
-        - asset: assets/custom_font.otf
+        - asset: assets/fonts/custom_font.otf

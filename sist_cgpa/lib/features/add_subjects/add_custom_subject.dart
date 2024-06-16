@@ -18,6 +18,16 @@ class _AddCustomSubjectDialogState extends State<AddCustomSubjectDialog> {
   var maxMarks = TextEditingController();
   var totalMarks = TextEditingController();
 
+  var border = OutlineInputBorder(
+    borderSide: const BorderSide(
+      color: Colors.black,
+      width: 1,
+    ),
+    borderRadius: BorderRadius.circular(
+      20,
+    ),
+  );
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -49,9 +59,8 @@ class _AddCustomSubjectDialogState extends State<AddCustomSubjectDialog> {
                 child: DropdownButtonFormField(
                   borderRadius: BorderRadius.circular(20),
                   decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
+                    enabledBorder: border,
+                    border: border,
                   ),
                   value: subjectTypes[0],
                   items: subjectTypes
@@ -74,6 +83,7 @@ class _AddCustomSubjectDialogState extends State<AddCustomSubjectDialog> {
                 hintText: "credit",
                 width: 70,
                 controller: subcredit,
+                inputType: TextInputType.number,
               )
             ],
           ),
@@ -85,6 +95,7 @@ class _AddCustomSubjectDialogState extends State<AddCustomSubjectDialog> {
                 hintText: "max Mark",
                 width: 100,
                 controller: maxMarks,
+                inputType: TextInputType.number,
               ),
               const SizedBox(
                 width: 20,
@@ -93,26 +104,30 @@ class _AddCustomSubjectDialogState extends State<AddCustomSubjectDialog> {
                 hintText: "your Mark",
                 width: 100,
                 controller: totalMarks,
+                inputType: TextInputType.number,
               )
             ],
           ),
-          ElevatedButton(
-            onPressed: () {
-              var sub = Subject(
-                semester: 0,
-                subCode: subCode.text,
-                subName: subName.text,
-                subType: subType,
-                credit: int.parse(subcredit.text),
-                maxMarks: int.parse(maxMarks.text),
-              );
-              var semsub = SemSubject(
-                sub: sub,
-                mark: int.parse(totalMarks.text),
-              );
-              Navigator.of(context).pop(semsub);
-            },
-            child: const Text("Submit"),
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: ElevatedButton(
+              onPressed: () {
+                var sub = Subject(
+                  semester: 0,
+                  subCode: subCode.text,
+                  subName: subName.text,
+                  subType: subType,
+                  credit: int.parse(subcredit.text),
+                  maxMarks: int.parse(maxMarks.text),
+                );
+                var semsub = SemSubject(
+                  sub: sub,
+                  mark: int.parse(totalMarks.text),
+                );
+                Navigator.of(context).pop(semsub);
+              },
+              child: const Text("Submit"),
+            ),
           )
         ],
       ),
@@ -123,21 +138,20 @@ class _AddCustomSubjectDialogState extends State<AddCustomSubjectDialog> {
     required String hintText,
     required TextEditingController controller,
     double? width,
+    TextInputType inputType = TextInputType.text,
   }) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: SizedBox(
         width: width,
         child: TextField(
+          keyboardType: inputType,
           controller: controller,
           decoration: InputDecoration(
             labelText: hintText,
             // hintText: hintText,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(
-                20,
-              ),
-            ),
+            enabledBorder: border,
+            border: border,
           ),
         ),
       ),
