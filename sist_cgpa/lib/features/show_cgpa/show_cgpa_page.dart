@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sist_cgpa/utilites/adhelper.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ShowCgpa extends StatefulWidget {
   static const String routeName = "/showCgpa";
@@ -13,7 +16,6 @@ class ShowCgpa extends StatefulWidget {
 }
 
 class _ShowCgpaState extends State<ShowCgpa> {
- 
   @override
   Widget build(BuildContext context) {
     // var transformedCgpa = (cgpa * 100).toInt();
@@ -51,7 +53,22 @@ class _ShowCgpaState extends State<ShowCgpa> {
               ),
             ),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                if (Platform.isAndroid || Platform.isIOS) {
+                  final appId = Platform.isAndroid
+                      ? 'com.bhuvanesh.sist_cgpa'
+                      : 'YOUR_IOS_APP_ID';
+                  final url = Uri.parse(
+                    Platform.isAndroid
+                        ? "market://details?id=$appId"
+                        : "https://apps.apple.com/app/id$appId",
+                  );
+                  launchUrl(
+                    url,
+                    mode: LaunchMode.externalApplication,
+                  );
+                }
+              },
               child: const Text(
                 "Give your Feedback",
               ),

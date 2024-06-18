@@ -65,14 +65,23 @@ class _SubjectItemState extends State<SubjectItem> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                    "${widget.subject.subCode} ${widget.subject.credit}",
+                  Row(
+                    children: [
+                      Text(
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        widget.subject.subCode,
+                      ),
+                      Text(
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        "\t\tcredit: ${widget.subject.credit}",
+                      ),
+                    ],
                   ),
                   Text(
                     overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
+                    maxLines: 2,
                     widget.subject.subName,
                   ),
                 ],

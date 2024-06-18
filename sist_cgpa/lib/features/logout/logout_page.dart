@@ -110,7 +110,7 @@ class _LogoutPageState extends State<LogoutPage> {
                 height: 20,
               ),
               const Text(
-                "Follow me on : ",
+                "Contact me on : ",
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -119,10 +119,47 @@ class _LogoutPageState extends State<LogoutPage> {
               const SizedBox(
                 height: 5,
               ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              //     Column(
+              //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              //       children: [
+              //         socialMediaButton(
+              //           name: "Github",
+              //           iconPath: "assets/icons/github_icon.png",
+              //           onPressed: () {
+              //             _launchURL(
+              //               "https://github.com/code-bhuvanesh",
+              //             );
+              //           },
+              //         ),
+              //         socialMediaButton(
+              //           name: "Linkedin",
+              //           iconPath: "assets/icons/linkedin_icon.png",
+              //           onPressed: () {
+              //             _launchURL(
+              //               "https://www.linkedin.com/in/bhuvanesh-devaraj/",
+              //             );
+              //           },
+              //         ),
+              //         socialMediaButton(
+              //           name: "Instagram",
+              //           iconPath: "assets/icons/instagram_icon.png",
+              //           onPressed: () {
+              //             _launchURL(
+              //               "https://www.instagram.com/ambitious__guy/",
+              //             );
+              //           },
+              //         ),
+              //       ],
+              //     ),
+              //     const SizedBox(
+              //       height: 25,
+              //     ),
+              //   ],
+              // ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  socialMediaButton(
+                  socialMediaIconButton(
                     name: "Github",
                     iconPath: "assets/icons/github_icon.png",
                     onPressed: () {
@@ -131,7 +168,7 @@ class _LogoutPageState extends State<LogoutPage> {
                       );
                     },
                   ),
-                  socialMediaButton(
+                  socialMediaIconButton(
                     name: "Linkedin",
                     iconPath: "assets/icons/linkedin_icon.png",
                     onPressed: () {
@@ -140,7 +177,7 @@ class _LogoutPageState extends State<LogoutPage> {
                       );
                     },
                   ),
-                  socialMediaButton(
+                  socialMediaIconButton(
                     name: "Instagram",
                     iconPath: "assets/icons/instagram_icon.png",
                     onPressed: () {
@@ -155,6 +192,37 @@ class _LogoutPageState extends State<LogoutPage> {
                 height: 25,
               ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget socialMediaIconButton({
+    required String name,
+    required String iconPath,
+    required void Function() onPressed,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: GestureDetector(
+        onTap: onPressed,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: SizedBox(
+            height: 50,
+            width: 50,
+            child: Card(
+              color: Colors.black,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Image.asset(
+                  iconPath,
+                  height: 20,
+                  width: 20,
+                ),
+              ),
+            ),
           ),
         ),
       ),

@@ -54,8 +54,11 @@ class _AddCustomSubjectDialogState extends State<AddCustomSubjectDialog> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             mainAxisSize: MainAxisSize.min,
             children: [
-              SizedBox(
-                width: 150,
+              Container(
+                width: MediaQuery.of(context).size.width * 0.3,
+                constraints: const BoxConstraints(
+                  minWidth: 140,
+                ),
                 child: DropdownButtonFormField(
                   borderRadius: BorderRadius.circular(20),
                   decoration: InputDecoration(
@@ -81,7 +84,7 @@ class _AddCustomSubjectDialogState extends State<AddCustomSubjectDialog> {
               ),
               customTextField(
                 hintText: "credit",
-                width: 70,
+                isSmall: true,
                 controller: subcredit,
                 inputType: TextInputType.number,
               )
@@ -92,8 +95,8 @@ class _AddCustomSubjectDialogState extends State<AddCustomSubjectDialog> {
             mainAxisSize: MainAxisSize.min,
             children: [
               customTextField(
-                hintText: "max Mark",
-                width: 100,
+                hintText: "max\nMark",
+                isSmall: true,
                 controller: maxMarks,
                 inputType: TextInputType.number,
               ),
@@ -101,8 +104,8 @@ class _AddCustomSubjectDialogState extends State<AddCustomSubjectDialog> {
                 width: 20,
               ),
               customTextField(
-                hintText: "your Mark",
-                width: 100,
+                hintText: "your\nMark",
+                isSmall: true,
                 controller: totalMarks,
                 inputType: TextInputType.number,
               )
@@ -137,21 +140,29 @@ class _AddCustomSubjectDialogState extends State<AddCustomSubjectDialog> {
   Widget customTextField({
     required String hintText,
     required TextEditingController controller,
-    double? width,
+    bool isSmall = false,
     TextInputType inputType = TextInputType.text,
   }) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: SizedBox(
-        width: width,
-        child: TextField(
-          keyboardType: inputType,
-          controller: controller,
-          decoration: InputDecoration(
-            labelText: hintText,
-            // hintText: hintText,
-            enabledBorder: border,
-            border: border,
+    return Flexible(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: Container(
+          // width: isSmall
+          //     ? MediaQuery.of(context).size.width * 0.27
+          //     : MediaQuery.of(context).size.width * 0.6,
+          constraints: BoxConstraints(
+            maxWidth: isSmall ? 240 : 500,
+            minWidth: isSmall ? 80 : 200,
+          ),
+          child: TextField(
+            keyboardType: inputType,
+            controller: controller,
+            decoration: InputDecoration(
+              labelText: hintText,
+              // hintText: hintText,
+              enabledBorder: border,
+              border: border,
+            ),
           ),
         ),
       ),

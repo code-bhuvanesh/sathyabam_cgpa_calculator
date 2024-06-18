@@ -1,19 +1,19 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:sist_cgpa/features/add_subjects/add_subjects_page.dart';
-import 'package:sist_cgpa/features/calculate_cgpa/bloc/calculate_cgpa_bloc.dart';
-import 'package:sist_cgpa/features/logout/logout_page.dart';
-import 'package:sist_cgpa/features/show_cgpa/show_cgpa_page.dart';
-import 'package:sist_cgpa/models/sem_subject.dart';
-import 'package:sist_cgpa/utilites/theme.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
-import '../../utilites/adhelper.dart';
-import '../../widget/subject_wiget.dart';
+import '../add_subjects/add_subjects_page.dart';
+import '../logout/logout_page.dart';
+import '../show_cgpa/show_cgpa_page.dart';
+import 'bloc/calculate_cgpa_bloc.dart';
+import '/models/sem_subject.dart';
+import '/utilites/theme.dart';
+import '/utilites/adhelper.dart';
+import '/widget/subject_wiget.dart';
 import '/models/course.dart';
 import '/models/current_sem_cgpa.dart';
-import 'package:flutter/material.dart';
-
-import '../../utilites/secure_storage.dart';
+import '/utilites/secure_storage.dart';
 
 class CalculateGpaPage extends StatefulWidget {
   const CalculateGpaPage({
@@ -280,26 +280,41 @@ class _CalculateGpaPageState extends State<CalculateGpaPage>
                   ],
                 ),
               ),
+              _isADLoaded
+                  ? Align(
+                      alignment: Alignment.bottomCenter,
+                      child: SafeArea(
+                        child: SizedBox(
+                          width: _bannerAd!.size.width.toDouble(),
+                          height: _bannerAd!.size.height.toDouble(),
+                          child: AdWidget(ad: _bannerAd!),
+                        ),
+                      ),
+                    )
+                  : const SizedBox.shrink(),
               Expanded(
                 child: (semSubjects.keys.contains(currSem) &&
                         semSubjects[currSem]!.isNotEmpty)
                     ? ListView.builder(
                         controller: _scrollController,
+                        padding: const EdgeInsets.only(
+                          bottom: 15,
+                        ),
                         itemBuilder: (_, index) {
                           if (index == 0) {
-                            if (_isADLoaded) {
-                              // _bannerAd!.load();
-                              return Align(
-                                alignment: Alignment.bottomCenter,
-                                child: SafeArea(
-                                  child: SizedBox(
-                                    width: _bannerAd!.size.width.toDouble(),
-                                    height: _bannerAd!.size.height.toDouble(),
-                                    child: AdWidget(ad: _bannerAd!),
-                                  ),
-                                ),
-                              );
-                            }
+                            // if (_isADLoaded) {
+                            //   _bannerAd!.load();
+                            //   return Align(
+                            //     alignment: Alignment.bottomCenter,
+                            //     child: SafeArea(
+                            //       child: SizedBox(
+                            //         width: _bannerAd!.size.width.toDouble(),
+                            //         height: _bannerAd!.size.height.toDouble(),
+                            //         child: AdWidget(ad: _bannerAd!),
+                            //       ),
+                            //     ),
+                            //   );
+                            // }
                             return const SizedBox.shrink();
                           } else {
                             var semSubject = semSubjects[currSem]![index - 1];
@@ -309,7 +324,7 @@ class _CalculateGpaPageState extends State<CalculateGpaPage>
                               tec: semSubject.textController,
                               onDelete: () {
                                 setState(() {
-                                  semSubjects[currSem]!.removeAt(index);
+                                  semSubjects[currSem]!.removeAt(index - 1);
                                 });
                                 context.read<CalculateCgpaBloc>().add(
                                       CalculateGpa(
@@ -386,11 +401,17 @@ class _CalculateGpaPageState extends State<CalculateGpaPage>
             if (!semSubjects.keys.contains(currSem)) {
               semSubjects[currSem] = [];
             }
-            setState(
-              () {
+
+            setState(() {
+              //if subject is not already added add it
+              if (semSubjects[currSem]!
+                  .where((e) => (e.sub.subCode == newSubject.sub.subCode))
+                  .isEmpty) {
                 semSubjects[currSem]!.add(newSubject);
-              },
-            );
+              } else {
+                Fluttertoast.showToast(msg: "subject has already added");
+              }
+            });
             // ignore: use_build_context_synchronously
             context.read<CalculateCgpaBloc>().add(
                   CalculateGpa(

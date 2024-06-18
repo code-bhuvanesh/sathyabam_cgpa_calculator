@@ -334,7 +334,9 @@ class _AddSubjectTileState extends State<AddSubjectTile> {
                       ],
                       onChanged: validateField,
                       decoration: InputDecoration(
-                        border: const OutlineInputBorder(),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
                         hintText: widget.subject.maxMarks.toString(),
                         errorText: validate ? null : null,
                       ),

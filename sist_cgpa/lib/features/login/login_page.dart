@@ -82,114 +82,123 @@ class _LoginPageState extends State<LoginPage> {
                     });
                   }
                 },
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      flex: 2,
-                      child: logo(),
-                    ),
-                    Expanded(
-                      flex: 3,
-                      child: SingleChildScrollView(
-                        child: Form(
-                          key: _formKey,
-                          child: Column(
-                            children: [
-                              const Align(
-                                alignment: Alignment.centerLeft,
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 30.0,
-                                    vertical: 10.0,
-                                  ),
-                                  child: Text(
-                                    "Login for easy access",
-                                    textAlign: TextAlign.start,
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                      // color: Color.fromARGB(255, 3, 8, 87),
+                child: Container(
+                  width: double.infinity,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: logo(),
+                      ),
+                      Expanded(
+                        flex: 3,
+                        child: SingleChildScrollView(
+                          child: Form(
+                            key: _formKey,
+                            child: Container(
+                              constraints: const BoxConstraints(
+                                maxWidth: 500,
+                              ),
+                              child: Column(
+                                children: [
+                                  const Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Padding(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 30.0,
+                                        // vertical: 10.0,
+                                      ),
+                                      child: Text(
+                                        "Login for easy access",
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                          // color: Color.fromARGB(255, 3, 8, 87),
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ),
-                              customTextField(
-                                hintText: "register number",
-                                controller: regnoController,
-                                validator: isvalidRegno,
-                                inputType: TextInputType.number,
-                              ),
-                              // customTextField(
-                              //     hintText: "date of birth",
-                              //     controller: dobController,
-                              //     validator: isValidDOBFormat),
-                              customTextField(
-                                hintText: "ERP password",
-                                controller: passwordController,
-                                isPassword: true,
-                                inputType: TextInputType.text,
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              ElevatedButton(
-                                onPressed: () {
-                                  if (_formKey.currentState!.validate()) {
-                                    setState(() {
-                                      _isLoading = true;
-                                    });
-                                    context.read<LoginBloc>().add(
-                                          OnLogin(
-                                            useSaved: false,
-                                            regno: regnoController.text,
-                                            dob: dobController.text,
-                                            erpPassword:
-                                                passwordController.text,
-                                          ),
-                                        );
-                                  }
-                                },
-                                child: const Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 30),
-                                  child: Text("Login"),
-                                ),
-                              ),
-
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                  top: 15.0,
-                                ),
-                                child: TextButton(
-                                  onPressed: () => Navigator.of(context)
-                                      .popAndPushNamed(
-                                          CalculateGpaPage.routeName),
-                                  child: const Text(
-                                    "skip",
-                                    style: TextStyle(
-                                      color: Color.fromARGB(255, 114, 114, 114),
-                                      fontSize: 18,
+                                  customTextField(
+                                    hintText: "register number",
+                                    controller: regnoController,
+                                    validator: isvalidRegno,
+                                    inputType: TextInputType.number,
+                                  ),
+                                  // customTextField(
+                                  //     hintText: "date of birth",
+                                  //     controller: dobController,
+                                  //     validator: isValidDOBFormat),
+                                  customTextField(
+                                    hintText: "ERP password",
+                                    controller: passwordController,
+                                    isPassword: true,
+                                    inputType: TextInputType.text,
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      if (_formKey.currentState!.validate()) {
+                                        setState(() {
+                                          _isLoading = true;
+                                        });
+                                        context.read<LoginBloc>().add(
+                                              OnLogin(
+                                                useSaved: false,
+                                                regno: regnoController.text,
+                                                dob: dobController.text,
+                                                erpPassword:
+                                                    passwordController.text,
+                                              ),
+                                            );
+                                      }
+                                    },
+                                    child: const Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 30),
+                                      child: Text("Login"),
                                     ),
                                   ),
-                                ),
-                              ),
 
-                              const Padding(
-                                padding: EdgeInsets.all(50),
-                                child: Text(
-                                  "Made by Bhuvanesh",
-                                  style: TextStyle(
-                                    // color: Colors.white,
-                                    fontSize: 20,
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                      top: 15.0,
+                                    ),
+                                    child: TextButton(
+                                      onPressed: () => Navigator.of(context)
+                                          .popAndPushNamed(
+                                              CalculateGpaPage.routeName),
+                                      child: const Text(
+                                        "skip",
+                                        style: TextStyle(
+                                          color: Color.fromARGB(
+                                              255, 114, 114, 114),
+                                          fontSize: 18,
+                                        ),
+                                      ),
+                                    ),
                                   ),
-                                ),
+                                  const Padding(
+                                    padding: EdgeInsets.all(50),
+                                    child: Text(
+                                      "Made by Bhuvanesh",
+                                      style: TextStyle(
+                                        // color: Colors.white,
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
+                            ),
                           ),
                         ),
                       ),
-                    )
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
