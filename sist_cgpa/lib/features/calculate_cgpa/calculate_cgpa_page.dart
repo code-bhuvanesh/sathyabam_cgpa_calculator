@@ -280,7 +280,9 @@ class _CalculateGpaPageState extends State<CalculateGpaPage>
                   ],
                 ),
               ),
-              _isADLoaded
+              (semSubjects.keys.contains(currSem) &&
+                      semSubjects[currSem]!.isNotEmpty &&
+                      _isADLoaded)
                   ? Align(
                       alignment: Alignment.bottomCenter,
                       child: SafeArea(

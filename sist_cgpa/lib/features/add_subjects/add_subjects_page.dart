@@ -136,38 +136,55 @@ class _AddSubjectsPageState extends State<AddSubjectsPage> {
                       ),
                     ),
                     Expanded(
-                      child: ListView.builder(
-                        padding: const EdgeInsets.all(8.0),
-                        controller: _scrollController,
-                        itemBuilder: (_, index) {
-                          if (index == 0) {
-                            return Padding(
-                              padding: const EdgeInsets.only(bottom: 8.0),
-                              child: addCustomSubjectButtton(context),
-                            );
-                          }
-                          if (index == 1) {
-                            if (_isADLoaded) {
-                              _bannerAd!.load();
-                              return Align(
-                                alignment: Alignment.bottomCenter,
-                                child: SafeArea(
-                                  child: SizedBox(
-                                    width: _bannerAd!.size.width.toDouble(),
-                                    height: _bannerAd!.size.height.toDouble(),
-                                    child: AdWidget(ad: _bannerAd!),
+                      child: Column(
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: ListView.builder(
+                              padding: const EdgeInsets.all(8.0),
+                              controller: _scrollController,
+                              itemBuilder: (_, index) {
+                                if (index == 0) {
+                                  return Padding(
+                                    padding: const EdgeInsets.only(bottom: 8.0),
+                                    child: addCustomSubjectButtton(context),
+                                  );
+                                }
+                                if (index == 1) {
+                                  if (_isADLoaded) {
+                                    _bannerAd!.load();
+                                    return Align(
+                                      alignment: Alignment.bottomCenter,
+                                      child: SafeArea(
+                                        child: SizedBox(
+                                          width:
+                                              _bannerAd!.size.width.toDouble(),
+                                          height:
+                                              _bannerAd!.size.height.toDouble(),
+                                          child: AdWidget(ad: _bannerAd!),
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                  return const SizedBox.shrink();
+                                } else {
+                                  return AddSubjectTile(
+                                    subject: subjectsList[index - 2],
+                                  );
+                                }
+                              },
+                              itemCount: subjectsList.length + 2,
+                            ),
+                          ),
+                          subjectsList.isEmpty
+                              ? const Expanded(
+                                  flex: 1,
+                                  child: Text(
+                                    "No subjects found for the given query\ncorrect the query or add a custom subject",
                                   ),
-                                ),
-                              );
-                            }
-                            return const SizedBox.shrink();
-                          } else {
-                            return AddSubjectTile(
-                              subject: subjectsList[index - 2],
-                            );
-                          }
-                        },
-                        itemCount: subjectsList.length + 2,
+                                )
+                              : const SizedBox.shrink(),
+                        ],
                       ),
                     ),
                   ],

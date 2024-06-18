@@ -68,6 +68,16 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         await secureStorage.writeSecureData(startYearKey, startyear);
         await secureStorage.writeSecureData(endYearKey, endyear);
 
+        //due to some unkown subject not loading bug i am doing logout once and then again logging in
+        await secureStorage.deleteAll();
+        // debugPrint(token);
+        await secureStorage.writeSecureData(regnoKey, regno);
+        await secureStorage.writeSecureData(dobKey, dob);
+        await secureStorage.writeSecureData(erpPasswordKey, password);
+        await secureStorage.writeSecureData(authTokenKey, token);
+        await secureStorage.writeSecureData(startYearKey, startyear);
+        await secureStorage.writeSecureData(endYearKey, endyear);
+
         emit(LoginSucess());
         // debugPrint(await secureStorage.readSecureData(authTokenKey));
       } else {
