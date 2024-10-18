@@ -185,7 +185,7 @@ class _CalculateGpaPageState extends State<CalculateGpaPage>
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          "CGPA calculator",
+          "SIST CGPA",
           style: TextStyle(
               // color: Colors.black,
               ),
@@ -425,16 +425,15 @@ class _CalculateGpaPageState extends State<CalculateGpaPage>
                   .where((e) => (e.sub.subCode == newSubject.sub.subCode))
                   .isEmpty) {
                 semSubjects[currSem]!.add(newSubject);
-               
               } else {
                 Fluttertoast.showToast(msg: "subject has already added");
               }
             });
 
-             await SecureStorage().saveSemSubjects(
-                    semSubjects); //when ever a new subject is added
-                print(
-                    "semsubjects3235 : \n${await SecureStorage().readSemSubjects()}");
+            await SecureStorage().saveSemSubjects(
+                semSubjects); //when ever a new subject is added
+            print(
+                "semsubjects3235 : \n${await SecureStorage().readSemSubjects()}");
             // ignore: use_build_context_synchronously
             context.read<CalculateCgpaBloc>().add(
                   CalculateGpa(
