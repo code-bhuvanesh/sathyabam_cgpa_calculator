@@ -45,6 +45,8 @@ class _CalculateGpaPageState extends State<CalculateGpaPage>
   //user details
   SecureStorage secureStorage = SecureStorage();
 
+  bool dialogShown = false;
+
   @override
   void initState() {
     super.initState();
@@ -53,7 +55,19 @@ class _CalculateGpaPageState extends State<CalculateGpaPage>
     loadFullScreenAd();
     loadBannerAd();
     context.read<CalculateCgpaBloc>().add(LoadSubjects());
-    WidgetsBinding.instance.addPostFrameCallback((_) => showEnsureDialog());
+    () async {
+      print("semsubjects323 : \n${await SecureStorage().readSemSubjects()}");
+    };
+    // print("*******************************");
+    // print("*******************************");
+  }
+
+  @override
+  void didChangeDependencies() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      showEnsureDialog();
+    });
+    super.didChangeDependencies();
   }
 
   @override
@@ -130,11 +144,13 @@ class _CalculateGpaPageState extends State<CalculateGpaPage>
   }
 
   void showEnsureDialog() {
+    if (dialogShown) return;
+    dialogShown = true;
     showDialog(
       context: context,
       builder: (context) => Dialog(
         child: Container(
-          width: 300,
+          width: 350,
           padding: const EdgeInsets.symmetric(
             horizontal: 13,
             vertical: 20,
@@ -144,9 +160,9 @@ class _CalculateGpaPageState extends State<CalculateGpaPage>
             children: [
               const Center(
                 child: Text(
-                  "Ensure all the subjects are listed in all the semester to calculate CGPA properly.\nThere may be some missing subjects",
+                  "Ensure all the subjects are listed in each semester to calculate CGPA properly.\n\nThere may be some missing subjects. \n\nUnfortunately latest semster marks may not be available in ERP so you need to manually add it.",
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 18,
                   ),
                 ),
               ),
@@ -193,6 +209,7 @@ class _CalculateGpaPageState extends State<CalculateGpaPage>
       body: BlocListener<CalculateCgpaBloc, CalculateCgpaState>(
         listener: (context, state) async {
           if (state is SubjectsLoaded) {
+            loadBannerAd();
             for (var element in state.semSubjects.keys) {
               if (element > totalSem) {
                 totalSem = element;
@@ -215,8 +232,6 @@ class _CalculateGpaPageState extends State<CalculateGpaPage>
             setState(() {
               curGpa = state.gpa;
             });
-            await SecureStorage().saveSemSubjects(
-                semSubjects); //when ever a new subject is added
           } else if (state is CgpaResult) {
             loadFullScreenAd();
             if (_interstitialAd != null) {
@@ -410,10 +425,16 @@ class _CalculateGpaPageState extends State<CalculateGpaPage>
                   .where((e) => (e.sub.subCode == newSubject.sub.subCode))
                   .isEmpty) {
                 semSubjects[currSem]!.add(newSubject);
+               
               } else {
                 Fluttertoast.showToast(msg: "subject has already added");
               }
             });
+
+             await SecureStorage().saveSemSubjects(
+                    semSubjects); //when ever a new subject is added
+                print(
+                    "semsubjects3235 : \n${await SecureStorage().readSemSubjects()}");
             // ignore: use_build_context_synchronously
             context.read<CalculateCgpaBloc>().add(
                   CalculateGpa(
@@ -425,6 +446,18 @@ class _CalculateGpaPageState extends State<CalculateGpaPage>
         child: const Icon(Icons.add),
       ),
     );
+  }
+
+  bool checkIfSubjectsAdded() {
+    // print("******************************");
+    // print(semSubjects.keys.contains(currSem));
+    // print(semSubjects[currSem]!.isNotEmpty);
+    //check for next sem because some students doesn't have marks and sem 1
+    return (semSubjects.keys.contains(currSem + 1) &&
+            semSubjects[currSem + 1]!.isNotEmpty) ||
+        (semSubjects.keys.contains(currSem) &&
+            semSubjects[currSem]!.isNotEmpty);
+    return true;
   }
 
   Card arrowButton({required bool isLeftButton}) {
@@ -453,9 +486,11 @@ class _CalculateGpaPageState extends State<CalculateGpaPage>
           }
           if (isLeftButton && currSem > 1) {
             currSem--;
-          } else if (!isLeftButton && currSem < totalSem) {
+          } else if (!isLeftButton &&
+              currSem < totalSem &&
+              checkIfSubjectsAdded()) {
             currSem++;
-          } else if (currSem == totalSem) {
+          } else if (currSem == totalSem && checkIfSubjectsAdded()) {
             totalSem++;
             currSem++;
           }

@@ -1,9 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:lottie/lottie.dart';
-import 'package:sist_cgpa/utilites/adhelper.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ShowCgpa extends StatefulWidget {
@@ -20,6 +18,10 @@ class _ShowCgpaState extends State<ShowCgpa> {
   Widget build(BuildContext context) {
     // var transformedCgpa = (cgpa * 100).toInt();
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        title: const Text(""),
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,

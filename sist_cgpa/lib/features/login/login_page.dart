@@ -82,7 +82,7 @@ class _LoginPageState extends State<LoginPage> {
                     });
                   }
                 },
-                child: Container(
+                child: SizedBox(
                   width: double.infinity,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,

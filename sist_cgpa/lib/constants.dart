@@ -40,3 +40,15 @@ const erpPasswordKey = "erpPassword";
 const authTokenKey = "authToken";
 const startYearKey = "startyear";
 const endYearKey = "endyear";
+
+//banner ad id
+//test id
+const adBannerid = "ca-app-pub-3940256099942544/9214589741";
+//production id
+// const adid = "ca-app-pub-1084174997155279/3496783807";
+
+//fullscreen ad id
+//test id
+const fsADid = "ca-app-pub-3940256099942544/1033173712";
+//production id
+// const fullscreenADid = "ca-app-pub-1084174997155279/2362847297";

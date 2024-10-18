@@ -95,20 +95,20 @@ class MyApp extends StatelessWidget {
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
             style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.resolveWith(
+          backgroundColor: WidgetStateProperty.resolveWith(
             (states) {
-              if (states.contains(MaterialState.pressed)) {
+              if (states.contains(WidgetState.pressed)) {
                 return const Color.fromARGB(66, 26, 26, 26);
-              } else if (states.contains(MaterialState.hovered)) {
+              } else if (states.contains(WidgetState.hovered)) {
                 return Colors.black87;
-              } else if (states.contains(MaterialState.focused)) {
+              } else if (states.contains(WidgetState.focused)) {
                 return Colors.black;
               } else {
                 return Colors.black;
               }
             },
           ),
-          foregroundColor: MaterialStateProperty.resolveWith(
+          foregroundColor: WidgetStateProperty.resolveWith(
             (states) {
               return Colors.white;
             },

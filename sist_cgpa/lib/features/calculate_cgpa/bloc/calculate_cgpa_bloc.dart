@@ -183,7 +183,7 @@ class CalculateCgpaBloc extends Bloc<CalculateCgpaEvent, CalculateCgpaState> {
       }
       // debugPrint("subject loaded emited ${semSubjects.keys}");
       emit(SubjectsLoaded(semSubjects: semSubjects));
-      await SecureStorage().saveSemSubjects(semSubjects);
+      // await SecureStorage().saveSemSubjects(semSubjects);
     }
   }
 }

@@ -75,7 +75,7 @@ class _SubjectItemState extends State<SubjectItem> {
                       Text(
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
-                        "\t\tcredit: ${widget.subject.credit}",
+                        "\t|\tcredit: ${widget.subject.credit}",
                       ),
                     ],
                   ),

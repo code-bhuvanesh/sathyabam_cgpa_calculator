@@ -24,6 +24,7 @@ class SecureStorage {
 
   Future<void> deleteAll() async {
     try {
+      print("read delete1");
       await _storage.deleteAll(
           // iOptions: _getIOSOptions(),
           // aOptions: _getAndroidOptions(),
@@ -46,6 +47,7 @@ class SecureStorage {
 
   Future<void> deleteSecureData(String key) async {
     try {
+      print("read delete2");
       await _storage.delete(key: key);
     } catch (e) {
       debugPrint(e.toString());
@@ -66,7 +68,7 @@ class SecureStorage {
   }
 
   Future<void> saveSemSubjects(Map<int, List<SemSubject>> semSubjects) async {
-    // debugPrint(" semsubjects : ${semSubjects.map(
+    // debugPrint(" semsubjects32356 : ${semSubjects.map(
     //       (key, value) => MapEntry(
     //         key,
     //         value.map(
@@ -74,6 +76,8 @@ class SecureStorage {
     //         ),
     //       ),
     //     ).toString()}");
+    debugPrint("semsubjects323 write ${semSubjects.keys}");
+
     var semSubjectJson = jsonEncode(semSubjects.map(
       (key, value) => MapEntry(
         key.toString(),
@@ -84,8 +88,10 @@ class SecureStorage {
             .toList(),
       ),
     ));
-
     await _storage.write(key: "semsubject", value: semSubjectJson);
+    // debugPrint(
+    //     "semsubjects323567 ${jsonDecode((await _storage.read(key: "semsubject"))!)}");
+    debugPrint("semsubjects323 writeread ${await readSemSubjects()}");
   }
 
   Future<Map<int, List<SemSubject>>> readSemSubjects() async {
@@ -106,6 +112,8 @@ class SecureStorage {
               .toList(),
         );
       });
+
+      debugPrint("semsubjects323 read  ${semSubject.keys}");
 
       return semSubject;
     }

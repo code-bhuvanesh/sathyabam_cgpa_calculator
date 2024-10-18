@@ -1,11 +1,13 @@
 import 'dart:io';
 
+import '../constants.dart';
+
 class AdHelper {
   static String get bannerAdUnitId {
     if (Platform.isAndroid) {
-      return "ca-app-pub-1084174997155279/3496783807";
+      return adBannerid;
     } else if (Platform.isIOS) {
-      return "ca-app-pub-1084174997155279/3496783807";
+      return adBannerid;
     } else {
       throw UnsupportedError("Unsupported platform");
     }
@@ -13,9 +15,9 @@ class AdHelper {
 
   static String get fullscreenAdUnitId {
     if (Platform.isAndroid) {
-      return "ca-app-pub-1084174997155279/2362847297";
+      return fsADid;
     } else if (Platform.isIOS) {
-      return "ca-app-pub-1084174997155279/2362847297";
+      return fsADid;
     } else {
       throw UnsupportedError("Unsupported platform");
     }
