@@ -3,7 +3,7 @@ description: "sathyabama CGPA calculator"
 
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
-version: 1.0.9+9
+version: 1.1.2+12
 
 environment:
   sdk: ">=3.2.1 <4.0.0"
@@ -23,7 +23,7 @@ dependencies:
   sqflite: ^2.3.0
   lottie: ^3.1.2
   flutter_displaymode: ^0.6.0
-  google_mobile_ads: ^1.2.0
+  google_mobile_ads: ^5.1.0
   url_launcher: ^6.3.0
 
 dev_dependencies:

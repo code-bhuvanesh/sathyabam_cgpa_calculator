@@ -1,0 +1,72 @@
+body{
+    font-family: 'Roboto';
+    padding: 30px 30px;
+}
+
+.top-container{
+    display: flex;
+    flex-direction: row;    
+    align-items: center;
+
+}
+
+.app-container{
+    border-radius: 20px;
+    box-shadow: 5px 5px 2px rgb(182, 182, 182);
+    padding: 10px;
+    border: 1px;
+    border-style: solid;
+    
+}
+
+.app-logo{
+    height: 100px;
+    width: 100px;
+}
+
+.logo-text{
+    font-size: 3em;
+    margin: 0px 50px;
+    
+}
+
+.main-div{
+    /* width: 100%; */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin: 100px 0px;
+}
+
+.content-div{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.app-name{
+    font-size: 3em;
+    margin: 20px 80px;
+}
+
+.app-image{
+    height: 60vh;
+    margin: 0px 80px;
+    border-radius: 15px;
+    box-shadow: 15px 15px 10px rgb(117, 117, 117);
+}
+
+.playstore-icon{
+    width: 300px;
+}
+
+.slogan {
+    font-size: 2.5em;
+    margin: 20px 80px;
+    text-align: center;
+}
+.slogan span {
+    display: block;
+    margin: 10px 0;
+}
