@@ -10,19 +10,6 @@ This is a CGPA calculator app designed specifically for students of Sathyabama U
 - Grade point conversion: The app automatically converts grades into grade points based on the university's grading system.
 - Error handling: The app validates input to ensure accurate calculations and provides appropriate error messages if any discrepancies are found.
 
-## Screenshots
-
-### Homepage
-![Branch selection](screenshots/choose_branch_page.jpg)
-
-### Course Selection
-![Course Selection](screenshots/choose_course_page.jpg)
-
-### Marks Input
-![Marks Input](screenshots/marks_input.png)
-
-### CGPA Calculation
-![CGPA Calculation](screenshots/cgpa_page.jpg)
 
 ## How to Use
 
