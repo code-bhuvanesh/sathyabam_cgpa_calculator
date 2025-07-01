@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../add_subjects/add_subjects_page.dart';
@@ -9,7 +8,6 @@ import '../show_cgpa/show_cgpa_page.dart';
 import 'bloc/calculate_cgpa_bloc.dart';
 import '/models/sem_subject.dart';
 import '/utilites/theme.dart';
-import '/utilites/adhelper.dart';
 import '/widget/subject_wiget.dart';
 import '/models/course.dart';
 import '/models/current_sem_cgpa.dart';
@@ -52,8 +50,6 @@ class _CalculateGpaPageState extends State<CalculateGpaPage>
     super.initState();
     _scrollController = ScrollController();
     _scrollController.addListener(_onScroll);
-    loadFullScreenAd();
-    loadBannerAd();
     context.read<CalculateCgpaBloc>().add(LoadSubjects());
     () async {
       print("semsubjects323 : \n${await SecureStorage().readSemSubjects()}");
@@ -68,65 +64,6 @@ class _CalculateGpaPageState extends State<CalculateGpaPage>
       showEnsureDialog();
     });
     super.didChangeDependencies();
-  }
-
-  @override
-  void dispose() {
-    if (_bannerAd != null) _bannerAd!.dispose();
-    if (_interstitialAd != null) _interstitialAd!.dispose();
-    super.dispose();
-  }
-
-  BannerAd? _bannerAd;
-  bool _isADLoaded = false;
-
-  /// Loads a banner ad.
-  void loadBannerAd() {
-    try {
-      _bannerAd = BannerAd(
-        adUnitId: AdHelper.bannerAdUnitId,
-        request: const AdRequest(),
-        size: AdSize.banner,
-        listener: BannerAdListener(
-          onAdLoaded: (ad) {
-            debugPrint('$ad loaded.');
-            setState(() {
-              _isADLoaded = true;
-            });
-          },
-          // Called when an ad request failed.
-          onAdFailedToLoad: (ad, err) {
-            debugPrint('BannerAd failed to load: $err');
-            // Dispose the ad here to free resources.
-            ad.dispose();
-          },
-        ),
-      )..load();
-    } on Exception catch (e) {
-      debugPrint(e.toString());
-    }
-  }
-
-  InterstitialAd? _interstitialAd;
-  void loadFullScreenAd() {
-    try {
-      InterstitialAd.load(
-        adUnitId: AdHelper.fullscreenAdUnitId,
-        request: const AdRequest(),
-        adLoadCallback: InterstitialAdLoadCallback(
-          // Called when an ad is successfully received.
-          onAdLoaded: (ad) {
-            _interstitialAd = ad;
-          },
-          // Called when an ad request failed.
-          onAdFailedToLoad: (LoadAdError error) {
-            debugPrint('InterstitialAd failed to load: $error');
-          },
-        ),
-      );
-    } on Exception catch (e) {
-      debugPrint(e.toString());
-    }
   }
 
   late ScrollController _scrollController;
@@ -209,7 +146,6 @@ class _CalculateGpaPageState extends State<CalculateGpaPage>
       body: BlocListener<CalculateCgpaBloc, CalculateCgpaState>(
         listener: (context, state) async {
           if (state is SubjectsLoaded) {
-            loadBannerAd();
             for (var element in state.semSubjects.keys) {
               if (element > totalSem) {
                 totalSem = element;
@@ -233,10 +169,6 @@ class _CalculateGpaPageState extends State<CalculateGpaPage>
               curGpa = state.gpa;
             });
           } else if (state is CgpaResult) {
-            loadFullScreenAd();
-            if (_interstitialAd != null) {
-              await _interstitialAd!.show();
-            }
             if (mounted) {
               Navigator.of(context).pushNamed(
                 ShowCgpa.routeName,
@@ -295,20 +227,6 @@ class _CalculateGpaPageState extends State<CalculateGpaPage>
                   ],
                 ),
               ),
-              (semSubjects.keys.contains(currSem) &&
-                      semSubjects[currSem]!.isNotEmpty &&
-                      _isADLoaded)
-                  ? Align(
-                      alignment: Alignment.bottomCenter,
-                      child: SafeArea(
-                        child: SizedBox(
-                          width: _bannerAd!.size.width.toDouble(),
-                          height: _bannerAd!.size.height.toDouble(),
-                          child: AdWidget(ad: _bannerAd!),
-                        ),
-                      ),
-                    )
-                  : const SizedBox.shrink(),
               Expanded(
                 child: (semSubjects.keys.contains(currSem) &&
                         semSubjects[currSem]!.isNotEmpty)
@@ -318,41 +236,29 @@ class _CalculateGpaPageState extends State<CalculateGpaPage>
                           bottom: 15,
                         ),
                         itemBuilder: (_, index) {
-                          if (index == 0) {
-                            // if (_isADLoaded) {
-                            //   _bannerAd!.load();
-                            //   return Align(
-                            //     alignment: Alignment.bottomCenter,
-                            //     child: SafeArea(
-                            //       child: SizedBox(
-                            //         width: _bannerAd!.size.width.toDouble(),
-                            //         height: _bannerAd!.size.height.toDouble(),
-                            //         child: AdWidget(ad: _bannerAd!),
-                            //       ),
-                            //     ),
-                            //   );
-                            // }
-                            return const SizedBox.shrink();
-                          } else {
-                            var semSubject = semSubjects[currSem]![index - 1];
+                          var semSubject = semSubjects[currSem]![index];
 
-                            return SubjectItem(
-                              subject: semSubject.sub,
-                              tec: semSubject.textController,
-                              onDelete: () {
-                                setState(() {
-                                  semSubjects[currSem]!.removeAt(index - 1);
-                                });
-                                context.read<CalculateCgpaBloc>().add(
-                                      CalculateGpa(
-                                        subjects: semSubjects[currSem]!,
-                                      ),
-                                    );
-                              },
-                            );
-                          }
+                          return SubjectItem(
+                            subject: semSubject.sub,
+                            tec: semSubject.textController,
+                            onDelete: () {
+                              setState(() {
+                                semSubjects[currSem]!.removeAt(index);
+                              });
+                              context.read<CalculateCgpaBloc>().add(
+                                    CalculateGpa(
+                                      subjects: semSubjects[currSem]!,
+                                    ),
+                                  );
+                            },
+                            updateGPA: () {
+                              context.read<CalculateCgpaBloc>().add(
+                                  CalculateGpa(
+                                      subjects: semSubjects[currSem]!));
+                            },
+                          );
                         },
-                        itemCount: semSubjects[currSem]!.length + 1,
+                        itemCount: semSubjects[currSem]!.length,
                       )
                     : const Center(
                         child: Text(
@@ -456,7 +362,6 @@ class _CalculateGpaPageState extends State<CalculateGpaPage>
             semSubjects[currSem + 1]!.isNotEmpty) ||
         (semSubjects.keys.contains(currSem) &&
             semSubjects[currSem]!.isNotEmpty);
-    return true;
   }
 
   Card arrowButton({required bool isLeftButton}) {
@@ -475,7 +380,6 @@ class _CalculateGpaPageState extends State<CalculateGpaPage>
           size: 30,
         ),
         onPressed: () {
-          loadBannerAd();
           if (_scrollController.hasClients) {
             _scrollController.animateTo(
               0,

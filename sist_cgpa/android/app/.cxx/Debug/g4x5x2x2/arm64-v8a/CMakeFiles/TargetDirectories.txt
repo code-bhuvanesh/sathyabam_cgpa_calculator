@@ -1,0 +1,2 @@
+D:/Projects/personal_projects/cgpa_calculator/sist_cgpa/android/app/.cxx/Debug/g4x5x2x2/arm64-v8a/CMakeFiles/edit_cache.dir
+D:/Projects/personal_projects/cgpa_calculator/sist_cgpa/android/app/.cxx/Debug/g4x5x2x2/arm64-v8a/CMakeFiles/rebuild_cache.dir
